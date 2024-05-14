@@ -1,0 +1,1877 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/yimingzhang/Desktop/Econometric/pset3/Untitled.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}28 Aug 2023, 10:57:27
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. * 读入数据
+. use "Final_All_Merged_Data.xlsx", clear
+{err}{p 0 4 2}
+file {bf:{err}Final_All_Merged_Data.xlsx}
+not Stata format
+{p_end}
+{txt}{search r(610), local:r(610);}
+
+end of do-file
+
+{search r(610), local:r(610);}
+
+{com}. use "/Users/yimingzhang/Downloads/Final_All_Merged_Data_for_Stata.dta"
+
+. * 设置工作目录到您存储数据的地方
+
+. cd "your_directory_here"
+{err}unable to change to your_directory_here
+{txt}{search r(170), local:r(170);}
+
+{com}. 
+. * 读入数据
+
+. use "Final_All_Merged_Data_for_Stata.dta", clear
+
+. 
+. * 设置面板数据结构
+
+. xtset state Time
+{err}string variables not allowed in varlist;
+{bf}state{sf} is a string variable
+{txt}{search r(109), local:r(109);}
+
+{com}. 
+. * 检查数据的完整性和平衡性
+
+. xtdescribe
+{err}must specify panelvar and timevar; use {bf:xtset}
+{txt}{search r(459), local:r(459);}
+
+{com}. 
+. * 进行固定效应面板数据回归
+
+. xtreg municipal_bond_return revenue_per_pop return poverty lessthanhighschoolgraduate gamb_rev_dummy log_pop, fe
+{err}must specify panelvar; use {bf:xtset}
+{txt}{search r(459), local:r(459);}
+
+{com}. 
+. * 进行随机效应面板数据回归（如果需要）
+
+. xtreg municipal_bond_return revenue_per_pop return poverty lessthanhighschoolgraduate gamb_rev_dummy log_pop, re
+{err}must specify panelvar; use {bf:xtset}
+{txt}{search r(459), local:r(459);}
+
+{com}. 
+. * Hausman 检验，以选择固定效应和随机效应之间的最佳模型
+
+. hausman
+{txt}{p}You used the old syntax of {cmd:hausman}. Click {help hausman##|_new:here} to learn about the new syntax.{p_end}
+
+{err}no estimation results were previously stored by hausman
+{txt}{search r(198), local:r(198);}
+
+{com}. 
+. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. * 读入数据
+. use "Final_All_Merged_Data_for_Stata.dta", clear
+{err}{p 0 4 2}
+file {bf:{err}Final_All_Merged_Data_for_Stata.dta}
+not found
+{p_end}
+{txt}{search r(601), local:r(601);}
+
+end of do-file
+
+{search r(601), local:r(601);}
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. * 读入数据
+. use "Final_All_Merged_Data_for_Stata.dta", clear
+{txt}
+{com}. 
+. * 设置面板数据结构
+. xtset state Time
+{err}string variables not allowed in varlist;
+{bf}state{sf} is a string variable
+{txt}{search r(109), local:r(109);}
+
+end of do-file
+
+{search r(109), local:r(109);}
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. 
+. * 读入数据
+. use "Final_All_Merged_Data_for_Stata.dta", clear
+{txt}
+{com}. 
+. * 为 state 变量编码一个数值标签
+. encode state, generate(state_id)
+{txt}
+{com}. 
+. * 设置面板数据结构
+. xtset state_id Time
+{res}
+{col 1}{txt:Panel variable: }{res:state_id}{txt: (strongly balanced)}
+{p 1 16 2}{txt:Time variable: }{res:Time}{txt:, }{res:{bind:2014}}{txt: to }{res:{bind:2022}}{p_end}
+{txt}{col 10}Delta: {res}1 unit
+{txt}
+{com}. 
+. * 检查数据的完整性和平衡性
+. xtdescribe
+
+{txt}state_id:  {res}1{txt}, {res}2{txt}, ..., {res}25                                     {txt}n ={res}         25
+    {txt}Time:  {res}2014, 2015, ..., 2022                             {txt}T ={res}          9
+           {txt}Delta(Time) = {res}1 unit
+           {txt}Span(Time)  = {res}9 periods
+           {txt}(state_id*Time uniquely identifies each observation)
+
+Distribution of T_i:   min      5%     25%       50%       75%     95%     max
+                    {res}     9       9       9         9         9       9       9
+
+{txt}{col 6}Freq.  Percent    Cum. {c |}  Pattern
+ {hline 27}{c +}{c -}{c -}{hline 9}
+{res}       25    100.00  100.00{txt} {c |}  {res}111111111
+{txt} {hline 27}{c +}{c -}{c -}{hline 9}
+{res}       25    100.00        {txt} {c |}  {res}XXXXXXXXX
+{txt}
+{com}. 
+. * 进行固定效应面板数据回归
+. xtreg municipal_bond_return revenue_per_pop return poverty lessthanhighschoolgraduate gamb_rev_dummy log_pop, fe
+{txt}{p 0 6 2}note: {bf:return} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:poverty} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:lessthanhighschoolgraduate} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:gamb_rev_dummy} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:log_pop} omitted because of collinearity.{p_end}
+{res}
+{txt}Fixed-effects (within) regression{col 49}Number of obs{col 67}={col 69}{res}       225
+{txt}Group variable: {res}state_id{txt}{col 49}Number of groups{col 67}={col 69}{res}        25
+
+{txt}R-squared:{col 49}Obs per group:
+     Within  = {res}0.0695{col 63}{txt}min{col 67}={col 69}{res}         9
+{txt}     Between = {res}0.0041{col 63}{txt}avg{col 67}={col 69}{res}       9.0
+{txt}     Overall = {res}0.0028{col 63}{txt}max{col 67}={col 69}{res}         9
+
+{txt}{col 49}F({res}1{txt}, {res}199{txt}){col 67}={col 70}{res}    14.85
+{txt}corr(u_i, Xb) = {res}-0.9817{txt}{col 49}Prob > F{col 67}={col 73}{res}0.0002
+
+{txt}{hline 16}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}municipal_bon~n{col 17}{c |} Coefficient{col 29}  Std. err.{col 41}      t{col 49}   P>|t|{col 57}     [95% con{col 70}f. interval]
+{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+revenue_per_pop {c |}{col 17}{res}{space 2} -9615.11{col 29}{space 2}  2494.82{col 40}{space 1}   -3.85{col 49}{space 3}0.000{col 57}{space 4}-14534.79{col 70}{space 3}-4695.432
+{txt}{space 9}return {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+{space 8}poverty {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+lessthanhighs~e {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+{space 1}gamb_rev_dummy {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+{space 8}log_pop {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+{space 10}_cons {c |}{col 17}{res}{space 2} 6.603207{col 29}{space 2} 1.010053{col 40}{space 1}    6.54{col 49}{space 3}0.000{col 57}{space 4} 4.611427{col 70}{space 3} 8.594987
+{txt}{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+        sigma_u {c |} {res} 6.7962582
+        {txt}sigma_e {c |} {res} 4.7580335
+            {txt}rho {c |} {res} .67108037{txt}   (fraction of variance due to u_i)
+{hline 16}{c BT}{hline 64}
+F test that all u_i=0: F({res}24{txt}, {res}199{txt}) = {res}0.66{col 62}{txt}Prob > F = {res}0.8817
+{txt}
+{com}. 
+. * 进行随机效应面板数据回归（如果需要）
+. xtreg municipal_bond_return revenue_per_pop return poverty lessthanhighschoolgraduate gamb_rev_dummy log_pop, re
+{res}
+{txt}Random-effects GLS regression                   Number of obs     = {res}       225
+{txt}Group variable: {res}state_id                        {txt}Number of groups  = {res}        25
+
+{txt}R-squared:                                      Obs per group:
+     Within  = {res}0.0695                                         {txt}min = {res}         9
+{txt}     Between = {res}0.1080                                         {txt}avg = {res}       9.0
+{txt}     Overall = {res}0.0049                                         {txt}max = {res}         9
+
+                                                {txt}Wald chi2({res}6{txt})      =  {res}     1.08
+{txt}corr(u_i, X) = {res}0{txt} (assumed)                      Prob > chi2       =     {res}0.9826
+
+{txt}{hline 16}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}municipal_bon~n{col 17}{c |} Coefficient{col 29}  Std. err.{col 41}      z{col 49}   P>|z|{col 57}     [95% con{col 70}f. interval]
+{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+revenue_per_pop {c |}{col 17}{res}{space 2}-403.7311{col 29}{space 2} 588.9588{col 40}{space 1}   -0.69{col 49}{space 3}0.493{col 57}{space 4}-1558.069{col 70}{space 3} 750.6069
+{txt}{space 9}return {c |}{col 17}{res}{space 2}  4.98279{col 29}{space 2} 85.20935{col 40}{space 1}    0.06{col 49}{space 3}0.953{col 57}{space 4}-162.0245{col 70}{space 3} 171.9901
+{txt}{space 8}poverty {c |}{col 17}{res}{space 2} .0068219{col 29}{space 2} .2862569{col 40}{space 1}    0.02{col 49}{space 3}0.981{col 57}{space 4}-.5542314{col 70}{space 3} .5678751
+{txt}lessthanhighs~e {c |}{col 17}{res}{space 2}-.0777466{col 29}{space 2} .3747323{col 40}{space 1}   -0.21{col 49}{space 3}0.836{col 57}{space 4}-.8122084{col 70}{space 3} .6567151
+{txt}{space 1}gamb_rev_dummy {c |}{col 17}{res}{space 2} .4844334{col 29}{space 2} .8951758{col 40}{space 1}    0.54{col 49}{space 3}0.588{col 57}{space 4}-1.270079{col 70}{space 3} 2.238946
+{txt}{space 8}log_pop {c |}{col 17}{res}{space 2}-.0260038{col 29}{space 2} .4482014{col 40}{space 1}   -0.06{col 49}{space 3}0.954{col 57}{space 4}-.9044625{col 70}{space 3} .8524548
+{txt}{space 10}_cons {c |}{col 17}{res}{space 2} 4.011921{col 29}{space 2} 7.231027{col 40}{space 1}    0.55{col 49}{space 3}0.579{col 57}{space 4}-10.16063{col 70}{space 3} 18.18447
+{txt}{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+        sigma_u {c |} {res}         0
+        {txt}sigma_e {c |} {res} 4.7580335
+            {txt}rho {c |} {res}         0{txt}   (fraction of variance due to u_i)
+{hline 16}{c BT}{hline 64}
+
+{com}. 
+. * Hausman 检验，以选择固定效应和随机效应之间的最佳模型
+. hausman
+{txt}{p}You used the old syntax of {cmd:hausman}. Click {help hausman##|_new:here} to learn about the new syntax.{p_end}
+
+{err}no estimation results were previously stored by hausman
+{txt}{search r(198), local:r(198);}
+
+end of do-file
+
+{search r(198), local:r(198);}
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. 
+. * 读入数据
+. use "Final_All_Merged_Data_for_Stata.dta", clear
+{txt}
+{com}. 
+. * 为 state 变量编码一个数值标签
+. encode state, generate(state_id)
+{txt}
+{com}. 
+. * 设置面板数据结构
+. xtset state_id Time
+{res}
+{col 1}{txt:Panel variable: }{res:state_id}{txt: (strongly balanced)}
+{p 1 16 2}{txt:Time variable: }{res:Time}{txt:, }{res:{bind:2014}}{txt: to }{res:{bind:2022}}{p_end}
+{txt}{col 10}Delta: {res}1 unit
+{txt}
+{com}. 
+. * 检查数据的完整性和平衡性
+. xtdescribe
+
+{txt}state_id:  {res}1{txt}, {res}2{txt}, ..., {res}25                                     {txt}n ={res}         25
+    {txt}Time:  {res}2014, 2015, ..., 2022                             {txt}T ={res}          9
+           {txt}Delta(Time) = {res}1 unit
+           {txt}Span(Time)  = {res}9 periods
+           {txt}(state_id*Time uniquely identifies each observation)
+
+Distribution of T_i:   min      5%     25%       50%       75%     95%     max
+                    {res}     9       9       9         9         9       9       9
+
+{txt}{col 6}Freq.  Percent    Cum. {c |}  Pattern
+ {hline 27}{c +}{c -}{c -}{hline 9}
+{res}       25    100.00  100.00{txt} {c |}  {res}111111111
+{txt} {hline 27}{c +}{c -}{c -}{hline 9}
+{res}       25    100.00        {txt} {c |}  {res}XXXXXXXXX
+{txt}
+{com}. 
+. * 进行固定效应面板数据回归
+. xtreg municipal_bond_return revenue_per_pop return poverty lessthanhighschoolgraduate pop gamb_rev_dummy log_pop, fe
+{txt}{p 0 6 2}note: {bf:return} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:poverty} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:lessthanhighschoolgraduate} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:pop} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:gamb_rev_dummy} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:log_pop} omitted because of collinearity.{p_end}
+{res}
+{txt}Fixed-effects (within) regression{col 49}Number of obs{col 67}={col 69}{res}       225
+{txt}Group variable: {res}state_id{txt}{col 49}Number of groups{col 67}={col 69}{res}        25
+
+{txt}R-squared:{col 49}Obs per group:
+     Within  = {res}0.0695{col 63}{txt}min{col 67}={col 69}{res}         9
+{txt}     Between = {res}0.0041{col 63}{txt}avg{col 67}={col 69}{res}       9.0
+{txt}     Overall = {res}0.0028{col 63}{txt}max{col 67}={col 69}{res}         9
+
+{txt}{col 49}F({res}1{txt}, {res}199{txt}){col 67}={col 70}{res}    14.85
+{txt}corr(u_i, Xb) = {res}-0.9817{txt}{col 49}Prob > F{col 67}={col 73}{res}0.0002
+
+{txt}{hline 16}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}municipal_bon~n{col 17}{c |} Coefficient{col 29}  Std. err.{col 41}      t{col 49}   P>|t|{col 57}     [95% con{col 70}f. interval]
+{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+revenue_per_pop {c |}{col 17}{res}{space 2} -9615.11{col 29}{space 2}  2494.82{col 40}{space 1}   -3.85{col 49}{space 3}0.000{col 57}{space 4}-14534.79{col 70}{space 3}-4695.432
+{txt}{space 9}return {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+{space 8}poverty {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+lessthanhighs~e {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+{space 12}pop {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+{space 1}gamb_rev_dummy {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+{space 8}log_pop {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+{space 10}_cons {c |}{col 17}{res}{space 2} 6.603207{col 29}{space 2} 1.010053{col 40}{space 1}    6.54{col 49}{space 3}0.000{col 57}{space 4} 4.611427{col 70}{space 3} 8.594987
+{txt}{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+        sigma_u {c |} {res} 6.7962582
+        {txt}sigma_e {c |} {res} 4.7580335
+            {txt}rho {c |} {res} .67108037{txt}   (fraction of variance due to u_i)
+{hline 16}{c BT}{hline 64}
+F test that all u_i=0: F({res}24{txt}, {res}199{txt}) = {res}0.66{col 62}{txt}Prob > F = {res}0.8817
+{txt}
+{com}. 
+. * 进行随机效应面板数据回归（如果需要）
+. xtreg municipal_bond_return revenue_per_pop return poverty lessthanhighschoolgraduate pop gamb_rev_dummy log_pop, re
+{res}
+{txt}Random-effects GLS regression                   Number of obs     = {res}       225
+{txt}Group variable: {res}state_id                        {txt}Number of groups  = {res}        25
+
+{txt}R-squared:                                      Obs per group:
+     Within  = {res}0.0695                                         {txt}min = {res}         9
+{txt}     Between = {res}0.1072                                         {txt}avg = {res}       9.0
+{txt}     Overall = {res}0.0050                                         {txt}max = {res}         9
+
+                                                {txt}Wald chi2({res}7{txt})      =  {res}     1.08
+{txt}corr(u_i, X) = {res}0{txt} (assumed)                      Prob > chi2       =     {res}0.9934
+
+{txt}{hline 16}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}municipal_bon~n{col 17}{c |} Coefficient{col 29}  Std. err.{col 41}      z{col 49}   P>|z|{col 57}     [95% con{col 70}f. interval]
+{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+revenue_per_pop {c |}{col 17}{res}{space 2}-409.3659{col 29}{space 2} 593.3298{col 40}{space 1}   -0.69{col 49}{space 3}0.490{col 57}{space 4}-1572.271{col 70}{space 3} 753.5393
+{txt}{space 9}return {c |}{col 17}{res}{space 2} 7.194506{col 29}{space 2} 88.57712{col 40}{space 1}    0.08{col 49}{space 3}0.935{col 57}{space 4}-166.4135{col 70}{space 3} 180.8025
+{txt}{space 8}poverty {c |}{col 17}{res}{space 2} .0051776{col 29}{space 2} .2874412{col 40}{space 1}    0.02{col 49}{space 3}0.986{col 57}{space 4}-.5581968{col 70}{space 3}  .568552
+{txt}lessthanhighs~e {c |}{col 17}{res}{space 2} -.075287{col 29}{space 2}  .376495{col 40}{space 1}   -0.20{col 49}{space 3}0.842{col 57}{space 4}-.8132036{col 70}{space 3} .6626296
+{txt}{space 12}pop {c |}{col 17}{res}{space 2}-1.36e-08{col 29}{space 2} 1.45e-07{col 40}{space 1}   -0.09{col 49}{space 3}0.925{col 57}{space 4}-2.97e-07{col 70}{space 3} 2.70e-07
+{txt}{space 1}gamb_rev_dummy {c |}{col 17}{res}{space 2}  .472124{col 29}{space 2}  .906698{col 40}{space 1}    0.52{col 49}{space 3}0.603{col 57}{space 4}-1.304971{col 70}{space 3}  2.24922
+{txt}{space 8}log_pop {c |}{col 17}{res}{space 2}  .045619{col 29}{space 2} .8836239{col 40}{space 1}    0.05{col 49}{space 3}0.959{col 57}{space 4}-1.686252{col 70}{space 3}  1.77749
+{txt}{space 10}_cons {c |}{col 17}{res}{space 2}  2.99903{col 29}{space 2}  12.9739{col 40}{space 1}    0.23{col 49}{space 3}0.817{col 57}{space 4}-22.42935{col 70}{space 3} 28.42741
+{txt}{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+        sigma_u {c |} {res}         0
+        {txt}sigma_e {c |} {res} 4.7580335
+            {txt}rho {c |} {res}         0{txt}   (fraction of variance due to u_i)
+{hline 16}{c BT}{hline 64}
+
+{com}. 
+. * Hausman 检验，以选择固定效应和随机效应之间的最佳模型
+. hausman
+{txt}{p}You used the old syntax of {cmd:hausman}. Click {help hausman##|_new:here} to learn about the new syntax.{p_end}
+
+{err}no estimation results were previously stored by hausman
+{txt}{search r(198), local:r(198);}
+
+end of do-file
+
+{search r(198), local:r(198);}
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. * 设置工作目录到您存储数据的地方
+. cd "your_directory_here"
+{err}unable to change to your_directory_here
+{txt}{search r(170), local:r(170);}
+
+end of do-file
+
+{search r(170), local:r(170);}
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. 
+. * 读入数据
+. use "Final_All_Merged_Data_for_Stata.dta", clear
+{txt}
+{com}. 
+. * 为 state 变量编码一个数值标签
+. encode state, generate(state_id)
+{txt}
+{com}. 
+. * 设置面板数据结构
+. xtset state_id Time
+{res}
+{col 1}{txt:Panel variable: }{res:state_id}{txt: (strongly balanced)}
+{p 1 16 2}{txt:Time variable: }{res:Time}{txt:, }{res:{bind:2014}}{txt: to }{res:{bind:2022}}{p_end}
+{txt}{col 10}Delta: {res}1 unit
+{txt}
+{com}. 
+. * 固定效应模型
+. xtreg municipal_bond_return revenue_per_pop return poverty lessthanhighschoolgraduate gamb_rev_dummy pop, fe
+{txt}{p 0 6 2}note: {bf:return} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:poverty} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:lessthanhighschoolgraduate} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:gamb_rev_dummy} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:pop} omitted because of collinearity.{p_end}
+{res}
+{txt}Fixed-effects (within) regression{col 49}Number of obs{col 67}={col 69}{res}       225
+{txt}Group variable: {res}state_id{txt}{col 49}Number of groups{col 67}={col 69}{res}        25
+
+{txt}R-squared:{col 49}Obs per group:
+     Within  = {res}0.0695{col 63}{txt}min{col 67}={col 69}{res}         9
+{txt}     Between = {res}0.0041{col 63}{txt}avg{col 67}={col 69}{res}       9.0
+{txt}     Overall = {res}0.0028{col 63}{txt}max{col 67}={col 69}{res}         9
+
+{txt}{col 49}F({res}1{txt}, {res}199{txt}){col 67}={col 70}{res}    14.85
+{txt}corr(u_i, Xb) = {res}-0.9817{txt}{col 49}Prob > F{col 67}={col 73}{res}0.0002
+
+{txt}{hline 16}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}municipal_bon~n{col 17}{c |} Coefficient{col 29}  Std. err.{col 41}      t{col 49}   P>|t|{col 57}     [95% con{col 70}f. interval]
+{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+revenue_per_pop {c |}{col 17}{res}{space 2} -9615.11{col 29}{space 2}  2494.82{col 40}{space 1}   -3.85{col 49}{space 3}0.000{col 57}{space 4}-14534.79{col 70}{space 3}-4695.432
+{txt}{space 9}return {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+{space 8}poverty {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+lessthanhighs~e {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+{space 1}gamb_rev_dummy {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+{space 12}pop {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+{space 10}_cons {c |}{col 17}{res}{space 2} 6.603207{col 29}{space 2} 1.010053{col 40}{space 1}    6.54{col 49}{space 3}0.000{col 57}{space 4} 4.611427{col 70}{space 3} 8.594987
+{txt}{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+        sigma_u {c |} {res} 6.7962582
+        {txt}sigma_e {c |} {res} 4.7580335
+            {txt}rho {c |} {res} .67108037{txt}   (fraction of variance due to u_i)
+{hline 16}{c BT}{hline 64}
+F test that all u_i=0: F({res}24{txt}, {res}199{txt}) = {res}0.66{col 62}{txt}Prob > F = {res}0.8817
+{txt}
+{com}. outreg2 using regression_results.xls, replace
+{txt}{browse `"regression_results.xls"'}
+{browse `"/Users/yimingzhang/Desktop"' :dir}{com} : {txt}{stata `"seeout using "regression_results.txt""':seeout}
+
+{com}. 
+. * 随机效应模型
+. xtreg municipal_bond_return revenue_per_pop return poverty lessthanhighschoolgraduate gamb_rev_dummy pop, re
+{res}
+{txt}Random-effects GLS regression                   Number of obs     = {res}       225
+{txt}Group variable: {res}state_id                        {txt}Number of groups  = {res}        25
+
+{txt}R-squared:                                      Obs per group:
+     Within  = {res}0.0695                                         {txt}min = {res}         9
+{txt}     Between = {res}0.1045                                         {txt}avg = {res}       9.0
+{txt}     Overall = {res}0.0049                                         {txt}max = {res}         9
+
+                                                {txt}Wald chi2({res}6{txt})      =  {res}     1.08
+{txt}corr(u_i, X) = {res}0{txt} (assumed)                      Prob > chi2       =     {res}0.9823
+
+{txt}{hline 16}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}municipal_bon~n{col 17}{c |} Coefficient{col 29}  Std. err.{col 41}      z{col 49}   P>|z|{col 57}     [95% con{col 70}f. interval]
+{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+revenue_per_pop {c |}{col 17}{res}{space 2}-411.6309{col 29}{space 2} 590.3505{col 40}{space 1}   -0.70{col 49}{space 3}0.486{col 57}{space 4}-1568.697{col 70}{space 3} 745.4348
+{txt}{space 9}return {c |}{col 17}{res}{space 2} 6.633892{col 29}{space 2} 87.70767{col 40}{space 1}    0.08{col 49}{space 3}0.940{col 57}{space 4}  -165.27{col 70}{space 3} 178.5378
+{txt}{space 8}poverty {c |}{col 17}{res}{space 2} .0039911{col 29}{space 2} .2858649{col 40}{space 1}    0.01{col 49}{space 3}0.989{col 57}{space 4}-.5562937{col 70}{space 3} .5642759
+{txt}lessthanhighs~e {c |}{col 17}{res}{space 2}-.0746139{col 29}{space 2} .3754075{col 40}{space 1}   -0.20{col 49}{space 3}0.842{col 57}{space 4}-.8103991{col 70}{space 3} .6611713
+{txt}{space 1}gamb_rev_dummy {c |}{col 17}{res}{space 2} .4867379{col 29}{space 2} .8594071{col 40}{space 1}    0.57{col 49}{space 3}0.571{col 57}{space 4}-1.197669{col 70}{space 3} 2.171145
+{txt}{space 12}pop {c |}{col 17}{res}{space 2}-7.19e-09{col 29}{space 2} 7.34e-08{col 40}{space 1}   -0.10{col 49}{space 3}0.922{col 57}{space 4}-1.51e-07{col 70}{space 3} 1.37e-07
+{txt}{space 10}_cons {c |}{col 17}{res}{space 2}  3.66256{col 29}{space 2} 1.767952{col 40}{space 1}    2.07{col 49}{space 3}0.038{col 57}{space 4} .1974385{col 70}{space 3} 7.127681
+{txt}{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+        sigma_u {c |} {res}         0
+        {txt}sigma_e {c |} {res} 4.7580335
+            {txt}rho {c |} {res}         0{txt}   (fraction of variance due to u_i)
+{hline 16}{c BT}{hline 64}
+
+{com}. outreg2 using regression_results.xls, append
+{txt}{browse `"regression_results.xls"'}
+{browse `"/Users/yimingzhang/Desktop"' :dir}{com} : {txt}{stata `"seeout using "regression_results.txt""':seeout}
+
+{com}. 
+. * Hausman 检验，以选择固定效应和随机效应之间的最佳模型
+. hausman
+{txt}{p}You used the old syntax of {cmd:hausman}. Click {help hausman##|_new:here} to learn about the new syntax.{p_end}
+
+{err}no estimation results were previously stored by hausman
+{txt}{search r(198), local:r(198);}
+
+end of do-file
+
+{search r(198), local:r(198);}
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. 
+. * 读入数据
+. use "Final_All_Merged_Data_for_Stata.dta", clear
+{txt}
+{com}. 
+. * 为 state 变量编码一个数值标签
+. encode state, generate(state_id)
+{txt}
+{com}. 
+. * 设置面板数据结构
+. xtset state_id Time
+{res}
+{col 1}{txt:Panel variable: }{res:state_id}{txt: (strongly balanced)}
+{p 1 16 2}{txt:Time variable: }{res:Time}{txt:, }{res:{bind:2014}}{txt: to }{res:{bind:2022}}{p_end}
+{txt}{col 10}Delta: {res}1 unit
+{txt}
+{com}. 
+. * 固定效应模型
+. xtreg municipal_bond_return revenue_per_pop return poverty lessthanhighschoolgraduate gamb_rev_dummy log_pop, fe
+{txt}{p 0 6 2}note: {bf:return} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:poverty} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:lessthanhighschoolgraduate} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:gamb_rev_dummy} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:log_pop} omitted because of collinearity.{p_end}
+{res}
+{txt}Fixed-effects (within) regression{col 49}Number of obs{col 67}={col 69}{res}       225
+{txt}Group variable: {res}state_id{txt}{col 49}Number of groups{col 67}={col 69}{res}        25
+
+{txt}R-squared:{col 49}Obs per group:
+     Within  = {res}0.0695{col 63}{txt}min{col 67}={col 69}{res}         9
+{txt}     Between = {res}0.0041{col 63}{txt}avg{col 67}={col 69}{res}       9.0
+{txt}     Overall = {res}0.0028{col 63}{txt}max{col 67}={col 69}{res}         9
+
+{txt}{col 49}F({res}1{txt}, {res}199{txt}){col 67}={col 70}{res}    14.85
+{txt}corr(u_i, Xb) = {res}-0.9817{txt}{col 49}Prob > F{col 67}={col 73}{res}0.0002
+
+{txt}{hline 16}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}municipal_bon~n{col 17}{c |} Coefficient{col 29}  Std. err.{col 41}      t{col 49}   P>|t|{col 57}     [95% con{col 70}f. interval]
+{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+revenue_per_pop {c |}{col 17}{res}{space 2} -9615.11{col 29}{space 2}  2494.82{col 40}{space 1}   -3.85{col 49}{space 3}0.000{col 57}{space 4}-14534.79{col 70}{space 3}-4695.432
+{txt}{space 9}return {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+{space 8}poverty {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+lessthanhighs~e {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+{space 1}gamb_rev_dummy {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+{space 8}log_pop {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+{space 10}_cons {c |}{col 17}{res}{space 2} 6.603207{col 29}{space 2} 1.010053{col 40}{space 1}    6.54{col 49}{space 3}0.000{col 57}{space 4} 4.611427{col 70}{space 3} 8.594987
+{txt}{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+        sigma_u {c |} {res} 6.7962582
+        {txt}sigma_e {c |} {res} 4.7580335
+            {txt}rho {c |} {res} .67108037{txt}   (fraction of variance due to u_i)
+{hline 16}{c BT}{hline 64}
+F test that all u_i=0: F({res}24{txt}, {res}199{txt}) = {res}0.66{col 62}{txt}Prob > F = {res}0.8817
+{txt}
+{com}. outreg2 using regression_results.xls, replace
+{txt}{browse `"regression_results.xls"'}
+{browse `"/Users/yimingzhang/Desktop"' :dir}{com} : {txt}{stata `"seeout using "regression_results.txt""':seeout}
+
+{com}. 
+. * 随机效应模型
+. xtreg municipal_bond_return revenue_per_pop return poverty lessthanhighschoolgraduate gamb_rev_dummy log_pop, re
+{res}
+{txt}Random-effects GLS regression                   Number of obs     = {res}       225
+{txt}Group variable: {res}state_id                        {txt}Number of groups  = {res}        25
+
+{txt}R-squared:                                      Obs per group:
+     Within  = {res}0.0695                                         {txt}min = {res}         9
+{txt}     Between = {res}0.1080                                         {txt}avg = {res}       9.0
+{txt}     Overall = {res}0.0049                                         {txt}max = {res}         9
+
+                                                {txt}Wald chi2({res}6{txt})      =  {res}     1.08
+{txt}corr(u_i, X) = {res}0{txt} (assumed)                      Prob > chi2       =     {res}0.9826
+
+{txt}{hline 16}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}municipal_bon~n{col 17}{c |} Coefficient{col 29}  Std. err.{col 41}      z{col 49}   P>|z|{col 57}     [95% con{col 70}f. interval]
+{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+revenue_per_pop {c |}{col 17}{res}{space 2}-403.7311{col 29}{space 2} 588.9588{col 40}{space 1}   -0.69{col 49}{space 3}0.493{col 57}{space 4}-1558.069{col 70}{space 3} 750.6069
+{txt}{space 9}return {c |}{col 17}{res}{space 2}  4.98279{col 29}{space 2} 85.20935{col 40}{space 1}    0.06{col 49}{space 3}0.953{col 57}{space 4}-162.0245{col 70}{space 3} 171.9901
+{txt}{space 8}poverty {c |}{col 17}{res}{space 2} .0068219{col 29}{space 2} .2862569{col 40}{space 1}    0.02{col 49}{space 3}0.981{col 57}{space 4}-.5542314{col 70}{space 3} .5678751
+{txt}lessthanhighs~e {c |}{col 17}{res}{space 2}-.0777466{col 29}{space 2} .3747323{col 40}{space 1}   -0.21{col 49}{space 3}0.836{col 57}{space 4}-.8122084{col 70}{space 3} .6567151
+{txt}{space 1}gamb_rev_dummy {c |}{col 17}{res}{space 2} .4844334{col 29}{space 2} .8951758{col 40}{space 1}    0.54{col 49}{space 3}0.588{col 57}{space 4}-1.270079{col 70}{space 3} 2.238946
+{txt}{space 8}log_pop {c |}{col 17}{res}{space 2}-.0260038{col 29}{space 2} .4482014{col 40}{space 1}   -0.06{col 49}{space 3}0.954{col 57}{space 4}-.9044625{col 70}{space 3} .8524548
+{txt}{space 10}_cons {c |}{col 17}{res}{space 2} 4.011921{col 29}{space 2} 7.231027{col 40}{space 1}    0.55{col 49}{space 3}0.579{col 57}{space 4}-10.16063{col 70}{space 3} 18.18447
+{txt}{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+        sigma_u {c |} {res}         0
+        {txt}sigma_e {c |} {res} 4.7580335
+            {txt}rho {c |} {res}         0{txt}   (fraction of variance due to u_i)
+{hline 16}{c BT}{hline 64}
+
+{com}. outreg2 using regression_results.xls, append
+{txt}{browse `"regression_results.xls"'}
+{browse `"/Users/yimingzhang/Desktop"' :dir}{com} : {txt}{stata `"seeout using "regression_results.txt""':seeout}
+
+{com}. 
+. * Hausman 检验，以选择固定效应和随机效应之间的最佳模型
+. hausman
+{txt}{p}You used the old syntax of {cmd:hausman}. Click {help hausman##|_new:here} to learn about the new syntax.{p_end}
+
+{err}no estimation results were previously stored by hausman
+{txt}{search r(198), local:r(198);}
+
+end of do-file
+
+{search r(198), local:r(198);}
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. 
+. * 读入数据
+. use "Final_All_Merged_Data_for_Stata.dta", clear
+{txt}
+{com}. 
+. * 为 state 变量编码一个数值标签
+. encode state, generate(state_id)
+{err}variable {bf}state_id{sf} already defined
+{txt}{search r(110), local:r(110);}
+
+end of do-file
+
+{search r(110), local:r(110);}
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. 
+. * 读入数据
+. use "Final_All_Merged_Data_for_Stata.dta", clear
+{txt}
+{com}. 
+. 
+. * 设置面板数据结构
+. xtset state_id Time
+{res}
+{col 1}{txt:Panel variable: }{res:state_id}{txt: (strongly balanced)}
+{p 1 16 2}{txt:Time variable: }{res:Time}{txt:, }{res:{bind:2014}}{txt: to }{res:{bind:2022}}{p_end}
+{txt}{col 10}Delta: {res}1 unit
+{txt}
+{com}. 
+. * 固定效应模型
+. xtreg municipal_bond_return revenue_per_pop return poverty lessthanhighschoolgraduate gamb_rev_dummy log_pop, fe
+{err}variable {bf}log_pop{sf} not found
+{txt}{search r(111), local:r(111);}
+
+end of do-file
+
+{search r(111), local:r(111);}
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. 
+. * 读入数据
+. use "Final_All_Merged_Data_for_Stata.dta", clear
+{txt}
+{com}. 
+. gen log_pop = ln(pop)
+{txt}(144 missing values generated)
+
+{com}. 
+. * 设置面板数据结构
+. xtset state_id Time
+{res}
+{col 1}{txt:Panel variable: }{res:state_id}{txt: (strongly balanced)}
+{p 1 16 2}{txt:Time variable: }{res:Time}{txt:, }{res:{bind:2014}}{txt: to }{res:{bind:2022}}{p_end}
+{txt}{col 10}Delta: {res}1 unit
+{txt}
+{com}. 
+. * 固定效应模型
+. xtreg municipal_bond_return revenue_per_pop return poverty lessthanhighschoolgraduate gamb_rev_dummy log_pop, fe
+{txt}{p 0 6 2}note: {bf:return} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:poverty} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:lessthanhighschoolgraduate} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:gamb_rev_dummy} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:log_pop} omitted because of collinearity.{p_end}
+{res}
+{txt}Fixed-effects (within) regression{col 49}Number of obs{col 67}={col 69}{res}        81
+{txt}Group variable: {res}state_id{txt}{col 49}Number of groups{col 67}={col 69}{res}         9
+
+{txt}R-squared:{col 49}Obs per group:
+     Within  = {res}0.3394{col 63}{txt}min{col 67}={col 69}{res}         9
+{txt}     Between = {res}0.0859{col 63}{txt}avg{col 67}={col 69}{res}       9.0
+{txt}     Overall = {res}0.0585{col 63}{txt}max{col 67}={col 69}{res}         9
+
+{txt}{col 49}F({res}1{txt}, {res}71{txt}){col 67}={col 70}{res}    36.48
+{txt}corr(u_i, Xb) = {res}-0.8904{txt}{col 49}Prob > F{col 67}={col 73}{res}0.0000
+
+{txt}{hline 16}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}municipal_bon~n{col 17}{c |} Coefficient{col 29}  Std. err.{col 41}      t{col 49}   P>|t|{col 57}     [95% con{col 70}f. interval]
+{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+revenue_per_pop {c |}{col 17}{res}{space 2}-7.555393{col 29}{space 2} 1.250883{col 40}{space 1}   -6.04{col 49}{space 3}0.000{col 57}{space 4}-10.04958{col 70}{space 3}-5.061202
+{txt}{space 9}return {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+{space 8}poverty {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+lessthanhighs~e {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+{space 1}gamb_rev_dummy {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+{space 8}log_pop {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+{space 10}_cons {c |}{col 17}{res}{space 2}-2.148495{col 29}{space 2} .3759813{col 40}{space 1}   -5.71{col 49}{space 3}0.000{col 57}{space 4} -2.89818{col 70}{space 3}-1.398809
+{txt}{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+        sigma_u {c |} {res} 1.2875268
+        {txt}sigma_e {c |} {res} .89558541
+            {txt}rho {c |} {res} .67392728{txt}   (fraction of variance due to u_i)
+{hline 16}{c BT}{hline 64}
+F test that all u_i=0: F({res}8{txt}, {res}71{txt}) = {res}3.85{col 62}{txt}Prob > F = {res}0.0008
+{txt}
+{com}. outreg2 using regression_results.xls, replace
+{txt}{browse `"regression_results.xls"'}
+{browse `"/Users/yimingzhang/Desktop"' :dir}{com} : {txt}{stata `"seeout using "regression_results.txt""':seeout}
+
+{com}. 
+. * 随机效应模型
+. xtreg municipal_bond_return revenue_per_pop return poverty lessthanhighschoolgraduate gamb_rev_dummy log_pop, re
+{res}
+{txt}Random-effects GLS regression                   Number of obs     = {res}        81
+{txt}Group variable: {res}state_id                        {txt}Number of groups  = {res}         9
+
+{txt}R-squared:                                      Obs per group:
+     Within  = {res}0.3394                                         {txt}min = {res}         9
+{txt}     Between = {res}0.1175                                         {txt}avg = {res}       9.0
+{txt}     Overall = {res}0.1353                                         {txt}max = {res}         9
+
+                                                {txt}Wald chi2({res}6{txt})      =  {res}    11.58
+{txt}corr(u_i, X) = {res}0{txt} (assumed)                      Prob > chi2       =     {res}0.0721
+
+{txt}{hline 16}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}municipal_bon~n{col 17}{c |} Coefficient{col 29}  Std. err.{col 41}      z{col 49}   P>|z|{col 57}     [95% con{col 70}f. interval]
+{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+revenue_per_pop {c |}{col 17}{res}{space 2}-3.194738{col 29}{space 2} .9537915{col 40}{space 1}   -3.35{col 49}{space 3}0.001{col 57}{space 4}-5.064135{col 70}{space 3}-1.325341
+{txt}{space 9}return {c |}{col 17}{res}{space 2}  .182501{col 29}{space 2} .1975159{col 40}{space 1}    0.92{col 49}{space 3}0.355{col 57}{space 4} -.204623{col 70}{space 3} .5696251
+{txt}{space 8}poverty {c |}{col 17}{res}{space 2} .0229048{col 29}{space 2} .4946886{col 40}{space 1}    0.05{col 49}{space 3}0.963{col 57}{space 4}-.9466671{col 70}{space 3} .9924767
+{txt}lessthanhighs~e {c |}{col 17}{res}{space 2}-.3669334{col 29}{space 2} .3367719{col 40}{space 1}   -1.09{col 49}{space 3}0.276{col 57}{space 4}-1.026994{col 70}{space 3} .2931274
+{txt}{space 1}gamb_rev_dummy {c |}{col 17}{res}{space 2} .6889008{col 29}{space 2} .3146378{col 40}{space 1}    2.19{col 49}{space 3}0.029{col 57}{space 4}  .072222{col 70}{space 3}  1.30558
+{txt}{space 8}log_pop {c |}{col 17}{res}{space 2}-.1006389{col 29}{space 2}  .144007{col 40}{space 1}   -0.70{col 49}{space 3}0.485{col 57}{space 4}-.3828874{col 70}{space 3} .1816096
+{txt}{space 10}_cons {c |}{col 17}{res}{space 2}-1.495524{col 29}{space 2} .4950276{col 40}{space 1}   -3.02{col 49}{space 3}0.003{col 57}{space 4} -2.46576{col 70}{space 3}-.5252879
+{txt}{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+        sigma_u {c |} {res}         0
+        {txt}sigma_e {c |} {res} .89558541
+            {txt}rho {c |} {res}         0{txt}   (fraction of variance due to u_i)
+{hline 16}{c BT}{hline 64}
+
+{com}. outreg2 using regression_results.xls, append
+{txt}{browse `"regression_results.xls"'}
+{browse `"/Users/yimingzhang/Desktop"' :dir}{com} : {txt}{stata `"seeout using "regression_results.txt""':seeout}
+
+{com}. 
+. 
+{txt}end of do-file
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. 
+. * 读入数据
+. use "Final_All_Merged_Data_for_Stata.dta", clear
+{txt}
+{com}. 
+. gen log_pop = ln(pop)
+{txt}(144 missing values generated)
+
+{com}. 
+. * 设置面板数据结构
+. xtset state_id Time
+{res}
+{col 1}{txt:Panel variable: }{res:state_id}{txt: (strongly balanced)}
+{p 1 16 2}{txt:Time variable: }{res:Time}{txt:, }{res:{bind:2014}}{txt: to }{res:{bind:2022}}{p_end}
+{txt}{col 10}Delta: {res}1 unit
+{txt}
+{com}. 
+. * 随机效应模型
+. xtreg municipal_bond_return revenue_per_pop return poverty lessthanhighschoolgraduate gamb_rev_dummy log_pop, re
+{res}
+{txt}Random-effects GLS regression                   Number of obs     = {res}        81
+{txt}Group variable: {res}state_id                        {txt}Number of groups  = {res}         9
+
+{txt}R-squared:                                      Obs per group:
+     Within  = {res}0.3394                                         {txt}min = {res}         9
+{txt}     Between = {res}0.1175                                         {txt}avg = {res}       9.0
+{txt}     Overall = {res}0.1353                                         {txt}max = {res}         9
+
+                                                {txt}Wald chi2({res}6{txt})      =  {res}    11.58
+{txt}corr(u_i, X) = {res}0{txt} (assumed)                      Prob > chi2       =     {res}0.0721
+
+{txt}{hline 16}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}municipal_bon~n{col 17}{c |} Coefficient{col 29}  Std. err.{col 41}      z{col 49}   P>|z|{col 57}     [95% con{col 70}f. interval]
+{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+revenue_per_pop {c |}{col 17}{res}{space 2}-3.194738{col 29}{space 2} .9537915{col 40}{space 1}   -3.35{col 49}{space 3}0.001{col 57}{space 4}-5.064135{col 70}{space 3}-1.325341
+{txt}{space 9}return {c |}{col 17}{res}{space 2}  .182501{col 29}{space 2} .1975159{col 40}{space 1}    0.92{col 49}{space 3}0.355{col 57}{space 4} -.204623{col 70}{space 3} .5696251
+{txt}{space 8}poverty {c |}{col 17}{res}{space 2} .0229048{col 29}{space 2} .4946886{col 40}{space 1}    0.05{col 49}{space 3}0.963{col 57}{space 4}-.9466671{col 70}{space 3} .9924767
+{txt}lessthanhighs~e {c |}{col 17}{res}{space 2}-.3669334{col 29}{space 2} .3367719{col 40}{space 1}   -1.09{col 49}{space 3}0.276{col 57}{space 4}-1.026994{col 70}{space 3} .2931274
+{txt}{space 1}gamb_rev_dummy {c |}{col 17}{res}{space 2} .6889008{col 29}{space 2} .3146378{col 40}{space 1}    2.19{col 49}{space 3}0.029{col 57}{space 4}  .072222{col 70}{space 3}  1.30558
+{txt}{space 8}log_pop {c |}{col 17}{res}{space 2}-.1006389{col 29}{space 2}  .144007{col 40}{space 1}   -0.70{col 49}{space 3}0.485{col 57}{space 4}-.3828874{col 70}{space 3} .1816096
+{txt}{space 10}_cons {c |}{col 17}{res}{space 2}-1.495524{col 29}{space 2} .4950276{col 40}{space 1}   -3.02{col 49}{space 3}0.003{col 57}{space 4} -2.46576{col 70}{space 3}-.5252879
+{txt}{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+        sigma_u {c |} {res}         0
+        {txt}sigma_e {c |} {res} .89558541
+            {txt}rho {c |} {res}         0{txt}   (fraction of variance due to u_i)
+{hline 16}{c BT}{hline 64}
+
+{com}. outreg2 using regression_results.xls, replace
+{txt}{browse `"regression_results.xls"'}
+{browse `"/Users/yimingzhang/Desktop"' :dir}{com} : {txt}{stata `"seeout using "regression_results.txt""':seeout}
+
+{com}. 
+. 
+{txt}end of do-file
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. 
+. * 读入数据
+. use "Final_All_Merged_Data_for_Stata.dta", clear
+{txt}
+{com}. 
+. gen log_pop = ln(pop)
+{txt}(144 missing values generated)
+
+{com}. 
+. * 设置面板数据结构
+. xtset state_id Time
+{res}
+{col 1}{txt:Panel variable: }{res:state_id}{txt: (strongly balanced)}
+{p 1 16 2}{txt:Time variable: }{res:Time}{txt:, }{res:{bind:2014}}{txt: to }{res:{bind:2022}}{p_end}
+{txt}{col 10}Delta: {res}1 unit
+{txt}
+{com}. 
+. * 随机效应模型
+. xtreg municipal_bond_return revenue_per_pop return poverty lessthanhighschoolgraduate gamb_rev_dummy log_pop, re
+{res}
+{txt}Random-effects GLS regression                   Number of obs     = {res}        81
+{txt}Group variable: {res}state_id                        {txt}Number of groups  = {res}         9
+
+{txt}R-squared:                                      Obs per group:
+     Within  = {res}0.3394                                         {txt}min = {res}         9
+{txt}     Between = {res}0.1175                                         {txt}avg = {res}       9.0
+{txt}     Overall = {res}0.1353                                         {txt}max = {res}         9
+
+                                                {txt}Wald chi2({res}6{txt})      =  {res}    11.58
+{txt}corr(u_i, X) = {res}0{txt} (assumed)                      Prob > chi2       =     {res}0.0721
+
+{txt}{hline 16}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}municipal_bon~n{col 17}{c |} Coefficient{col 29}  Std. err.{col 41}      z{col 49}   P>|z|{col 57}     [95% con{col 70}f. interval]
+{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+revenue_per_pop {c |}{col 17}{res}{space 2}-3.194738{col 29}{space 2} .9537915{col 40}{space 1}   -3.35{col 49}{space 3}0.001{col 57}{space 4}-5.064135{col 70}{space 3}-1.325341
+{txt}{space 9}return {c |}{col 17}{res}{space 2}  .182501{col 29}{space 2} .1975159{col 40}{space 1}    0.92{col 49}{space 3}0.355{col 57}{space 4} -.204623{col 70}{space 3} .5696251
+{txt}{space 8}poverty {c |}{col 17}{res}{space 2} .0229048{col 29}{space 2} .4946886{col 40}{space 1}    0.05{col 49}{space 3}0.963{col 57}{space 4}-.9466671{col 70}{space 3} .9924767
+{txt}lessthanhighs~e {c |}{col 17}{res}{space 2}-.3669334{col 29}{space 2} .3367719{col 40}{space 1}   -1.09{col 49}{space 3}0.276{col 57}{space 4}-1.026994{col 70}{space 3} .2931274
+{txt}{space 1}gamb_rev_dummy {c |}{col 17}{res}{space 2} .6889008{col 29}{space 2} .3146378{col 40}{space 1}    2.19{col 49}{space 3}0.029{col 57}{space 4}  .072222{col 70}{space 3}  1.30558
+{txt}{space 8}log_pop {c |}{col 17}{res}{space 2}-.1006389{col 29}{space 2}  .144007{col 40}{space 1}   -0.70{col 49}{space 3}0.485{col 57}{space 4}-.3828874{col 70}{space 3} .1816096
+{txt}{space 10}_cons {c |}{col 17}{res}{space 2}-1.495524{col 29}{space 2} .4950276{col 40}{space 1}   -3.02{col 49}{space 3}0.003{col 57}{space 4} -2.46576{col 70}{space 3}-.5252879
+{txt}{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+        sigma_u {c |} {res}         0
+        {txt}sigma_e {c |} {res} .89558541
+            {txt}rho {c |} {res}         0{txt}   (fraction of variance due to u_i)
+{hline 16}{c BT}{hline 64}
+
+{com}. outreg2 using regression_results.xls, replace
+{txt}{browse `"regression_results.xls"'}
+{browse `"/Users/yimingzhang/Desktop"' :dir}{com} : {txt}{stata `"seeout using "regression_results.txt""':seeout}
+
+{com}. 
+. 
+{txt}end of do-file
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. 
+. * 读入数据
+. use "Final_All_Merged_Data_for_Stata.dta", clear
+{txt}
+{com}. 
+. gen log_pop = ln(pop)
+{txt}(144 missing values generated)
+
+{com}. 
+. * 设置面板数据结构
+. xtset state_id Time
+{res}
+{col 1}{txt:Panel variable: }{res:state_id}{txt: (strongly balanced)}
+{p 1 16 2}{txt:Time variable: }{res:Time}{txt:, }{res:{bind:2014}}{txt: to }{res:{bind:2022}}{p_end}
+{txt}{col 10}Delta: {res}1 unit
+{txt}
+{com}. 
+. * 随机效应模型
+. xtreg municipal_bond_return revenue_per_pop return poverty lessthanhighschoolgraduate gamb_rev_dummy pop, re
+{res}
+{txt}Random-effects GLS regression                   Number of obs     = {res}       225
+{txt}Group variable: {res}state_id                        {txt}Number of groups  = {res}        25
+
+{txt}R-squared:                                      Obs per group:
+     Within  = {res}0.0695                                         {txt}min = {res}         9
+{txt}     Between = {res}0.1045                                         {txt}avg = {res}       9.0
+{txt}     Overall = {res}0.0049                                         {txt}max = {res}         9
+
+                                                {txt}Wald chi2({res}6{txt})      =  {res}     1.08
+{txt}corr(u_i, X) = {res}0{txt} (assumed)                      Prob > chi2       =     {res}0.9823
+
+{txt}{hline 16}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}municipal_bon~n{col 17}{c |} Coefficient{col 29}  Std. err.{col 41}      z{col 49}   P>|z|{col 57}     [95% con{col 70}f. interval]
+{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+revenue_per_pop {c |}{col 17}{res}{space 2} -.062361{col 29}{space 2} .0894366{col 40}{space 1}   -0.70{col 49}{space 3}0.486{col 57}{space 4}-.2376534{col 70}{space 3} .1129314
+{txt}{space 9}return {c |}{col 17}{res}{space 2} .0071032{col 29}{space 2} .0939121{col 40}{space 1}    0.08{col 49}{space 3}0.940{col 57}{space 4}-.1769611{col 70}{space 3} .1911674
+{txt}{space 8}poverty {c |}{col 17}{res}{space 2} .0023097{col 29}{space 2} .1654305{col 40}{space 1}    0.01{col 49}{space 3}0.989{col 57}{space 4}-.3219281{col 70}{space 3} .3265474
+{txt}lessthanhighs~e {c |}{col 17}{res}{space 2}-.0345795{col 29}{space 2} .1739809{col 40}{space 1}   -0.20{col 49}{space 3}0.842{col 57}{space 4}-.3755758{col 70}{space 3} .3064169
+{txt}{space 1}gamb_rev_dummy {c |}{col 17}{res}{space 2} .1045168{col 29}{space 2} .1845397{col 40}{space 1}    0.57{col 49}{space 3}0.571{col 57}{space 4}-.2571743{col 70}{space 3} .4662078
+{txt}{space 12}pop {c |}{col 17}{res}{space 2} -.008603{col 29}{space 2} .0878526{col 40}{space 1}   -0.10{col 49}{space 3}0.922{col 57}{space 4}-.1807909{col 70}{space 3}  .163585
+{txt}{space 10}_cons {c |}{col 17}{res}{space 2}-.0334454{col 29}{space 2} .0897314{col 40}{space 1}   -0.37{col 49}{space 3}0.709{col 57}{space 4}-.2093156{col 70}{space 3} .1424249
+{txt}{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+        sigma_u {c |} {res}         0
+        {txt}sigma_e {c |} {res} 1.0216879
+            {txt}rho {c |} {res}         0{txt}   (fraction of variance due to u_i)
+{hline 16}{c BT}{hline 64}
+
+{com}. outreg2 using regression_results.xls, replace
+{txt}{browse `"regression_results.xls"'}
+{browse `"/Users/yimingzhang/Desktop"' :dir}{com} : {txt}{stata `"seeout using "regression_results.txt""':seeout}
+
+{com}. 
+. 
+{txt}end of do-file
+
+{com}. drop log_pop
+
+. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. 
+. * 读入数据
+. use "Final_All_Merged_Data_for_Stata.dta", clear
+{txt}
+{com}. 
+. gen log_pop = ln(pop)
+{txt}(144 missing values generated)
+
+{com}. 
+. * 设置面板数据结构
+. xtset state_id Time
+{res}
+{col 1}{txt:Panel variable: }{res:state_id}{txt: (strongly balanced)}
+{p 1 16 2}{txt:Time variable: }{res:Time}{txt:, }{res:{bind:2014}}{txt: to }{res:{bind:2022}}{p_end}
+{txt}{col 10}Delta: {res}1 unit
+{txt}
+{com}. 
+. * 随机效应模型
+. xtreg municipal_bond_return revenue_per_pop return poverty lessthanhighschoolgraduate gamb_rev_dummy pop, re
+{res}
+{txt}Random-effects GLS regression                   Number of obs     = {res}       225
+{txt}Group variable: {res}state_id                        {txt}Number of groups  = {res}        25
+
+{txt}R-squared:                                      Obs per group:
+     Within  = {res}0.0695                                         {txt}min = {res}         9
+{txt}     Between = {res}0.1045                                         {txt}avg = {res}       9.0
+{txt}     Overall = {res}0.0049                                         {txt}max = {res}         9
+
+                                                {txt}Wald chi2({res}6{txt})      =  {res}     1.08
+{txt}corr(u_i, X) = {res}0{txt} (assumed)                      Prob > chi2       =     {res}0.9823
+
+{txt}{hline 16}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}municipal_bon~n{col 17}{c |} Coefficient{col 29}  Std. err.{col 41}      z{col 49}   P>|z|{col 57}     [95% con{col 70}f. interval]
+{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+revenue_per_pop {c |}{col 17}{res}{space 2} -.062361{col 29}{space 2} .0894366{col 40}{space 1}   -0.70{col 49}{space 3}0.486{col 57}{space 4}-.2376534{col 70}{space 3} .1129314
+{txt}{space 9}return {c |}{col 17}{res}{space 2} .0071032{col 29}{space 2} .0939121{col 40}{space 1}    0.08{col 49}{space 3}0.940{col 57}{space 4}-.1769611{col 70}{space 3} .1911674
+{txt}{space 8}poverty {c |}{col 17}{res}{space 2} .0023097{col 29}{space 2} .1654305{col 40}{space 1}    0.01{col 49}{space 3}0.989{col 57}{space 4}-.3219281{col 70}{space 3} .3265474
+{txt}lessthanhighs~e {c |}{col 17}{res}{space 2}-.0345795{col 29}{space 2} .1739809{col 40}{space 1}   -0.20{col 49}{space 3}0.842{col 57}{space 4}-.3755758{col 70}{space 3} .3064169
+{txt}{space 1}gamb_rev_dummy {c |}{col 17}{res}{space 2} .1045168{col 29}{space 2} .1845397{col 40}{space 1}    0.57{col 49}{space 3}0.571{col 57}{space 4}-.2571743{col 70}{space 3} .4662078
+{txt}{space 12}pop {c |}{col 17}{res}{space 2} -.008603{col 29}{space 2} .0878526{col 40}{space 1}   -0.10{col 49}{space 3}0.922{col 57}{space 4}-.1807909{col 70}{space 3}  .163585
+{txt}{space 10}_cons {c |}{col 17}{res}{space 2}-.0334454{col 29}{space 2} .0897314{col 40}{space 1}   -0.37{col 49}{space 3}0.709{col 57}{space 4}-.2093156{col 70}{space 3} .1424249
+{txt}{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+        sigma_u {c |} {res}         0
+        {txt}sigma_e {c |} {res} 1.0216879
+            {txt}rho {c |} {res}         0{txt}   (fraction of variance due to u_i)
+{hline 16}{c BT}{hline 64}
+
+{com}. outreg2 using regression_results.xls, replace
+{txt}{browse `"regression_results.xls"'}
+{browse `"/Users/yimingzhang/Desktop"' :dir}{com} : {txt}{stata `"seeout using "regression_results.txt""':seeout}
+
+{com}. 
+. 
+{txt}end of do-file
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. 
+. * 读入数据
+. use "Final_All_Merged_Data_for_Stata.dta", clear
+{txt}
+{com}. 
+. gen log_pop = ln(pop)
+{txt}(144 missing values generated)
+
+{com}. 
+. rename pop new_pop1
+{res}{txt}
+{com}. rename log_pop pop
+{res}{txt}
+{com}. * 设置面板数据结构
+. xtset state_id Time
+{res}
+{col 1}{txt:Panel variable: }{res:state_id}{txt: (strongly balanced)}
+{p 1 16 2}{txt:Time variable: }{res:Time}{txt:, }{res:{bind:2014}}{txt: to }{res:{bind:2022}}{p_end}
+{txt}{col 10}Delta: {res}1 unit
+{txt}
+{com}. 
+. * 随机效应模型
+. xtreg municipal_bond_return revenue_per_pop return poverty lessthanhighschoolgraduate gamb_rev_dummy pop, re
+{res}
+{txt}Random-effects GLS regression                   Number of obs     = {res}        81
+{txt}Group variable: {res}state_id                        {txt}Number of groups  = {res}         9
+
+{txt}R-squared:                                      Obs per group:
+     Within  = {res}0.3394                                         {txt}min = {res}         9
+{txt}     Between = {res}0.1175                                         {txt}avg = {res}       9.0
+{txt}     Overall = {res}0.1353                                         {txt}max = {res}         9
+
+                                                {txt}Wald chi2({res}6{txt})      =  {res}    11.58
+{txt}corr(u_i, X) = {res}0{txt} (assumed)                      Prob > chi2       =     {res}0.0721
+
+{txt}{hline 16}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}municipal_bon~n{col 17}{c |} Coefficient{col 29}  Std. err.{col 41}      z{col 49}   P>|z|{col 57}     [95% con{col 70}f. interval]
+{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+revenue_per_pop {c |}{col 17}{res}{space 2}-3.194738{col 29}{space 2} .9537915{col 40}{space 1}   -3.35{col 49}{space 3}0.001{col 57}{space 4}-5.064135{col 70}{space 3}-1.325341
+{txt}{space 9}return {c |}{col 17}{res}{space 2}  .182501{col 29}{space 2} .1975159{col 40}{space 1}    0.92{col 49}{space 3}0.355{col 57}{space 4} -.204623{col 70}{space 3} .5696251
+{txt}{space 8}poverty {c |}{col 17}{res}{space 2} .0229048{col 29}{space 2} .4946886{col 40}{space 1}    0.05{col 49}{space 3}0.963{col 57}{space 4}-.9466671{col 70}{space 3} .9924767
+{txt}lessthanhighs~e {c |}{col 17}{res}{space 2}-.3669334{col 29}{space 2} .3367719{col 40}{space 1}   -1.09{col 49}{space 3}0.276{col 57}{space 4}-1.026994{col 70}{space 3} .2931274
+{txt}{space 1}gamb_rev_dummy {c |}{col 17}{res}{space 2} .6889008{col 29}{space 2} .3146378{col 40}{space 1}    2.19{col 49}{space 3}0.029{col 57}{space 4}  .072222{col 70}{space 3}  1.30558
+{txt}{space 12}pop {c |}{col 17}{res}{space 2}-.1006389{col 29}{space 2}  .144007{col 40}{space 1}   -0.70{col 49}{space 3}0.485{col 57}{space 4}-.3828874{col 70}{space 3} .1816096
+{txt}{space 10}_cons {c |}{col 17}{res}{space 2}-1.495524{col 29}{space 2} .4950276{col 40}{space 1}   -3.02{col 49}{space 3}0.003{col 57}{space 4} -2.46576{col 70}{space 3}-.5252879
+{txt}{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+        sigma_u {c |} {res}         0
+        {txt}sigma_e {c |} {res} .89558541
+            {txt}rho {c |} {res}         0{txt}   (fraction of variance due to u_i)
+{hline 16}{c BT}{hline 64}
+
+{com}. outreg2 using regression_results.xls, replace
+{txt}{browse `"regression_results.xls"'}
+{browse `"/Users/yimingzhang/Desktop"' :dir}{com} : {txt}{stata `"seeout using "regression_results.txt""':seeout}
+
+{com}. 
+. 
+{txt}end of do-file
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. 
+. * 读入数据
+. use "Final_All_Merged_Data_for_Stata.dta", clear
+{txt}
+{com}. 
+. gen log_pop = ln(pop)
+{txt}(144 missing values generated)
+
+{com}. 
+. foreach var in municipal_bond_return revenue_per_pop poverty lessthanhighschoolgraduate gamb_rev_dummy pop {c -(}
+{txt}  2{com}.     dfuller `var`, lags(0)
+{txt}  3{com}. {c )-}
+{err}` invalid name
+{txt}{search r(198), local:r(198);}
+
+end of do-file
+
+{search r(198), local:r(198);}
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. 
+. * 读入数据
+. use "Final_All_Merged_Data_for_Stata.dta", clear
+{txt}
+{com}. 
+. gen log_pop = ln(pop)
+{txt}(144 missing values generated)
+
+{com}. foreach var in municipal_bond_return revenue_per_pop poverty lessthanhighschoolgraduate gamb_rev_dummy pop {c -(}
+{txt}  2{com}.     dfuller `var`, lags(0)
+{txt}  3{com}. {c )-}
+{err}` invalid name
+{txt}{search r(198), local:r(198);}
+
+end of do-file
+
+{search r(198), local:r(198);}
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. 
+. * 读入数据
+. use "Final_All_Merged_Data_for_Stata.dta", clear
+{txt}
+{com}. 
+. gen log_pop = ln(pop)
+{txt}(144 missing values generated)
+
+{com}. 
+. 
+. 
+. 
+. 
+. rename pop new_pop1
+{res}{txt}
+{com}. rename log_pop pop
+{res}{txt}
+{com}. * 设置面板数据结构
+. xtset state_id Time
+{res}
+{col 1}{txt:Panel variable: }{res:state_id}{txt: (strongly balanced)}
+{p 1 16 2}{txt:Time variable: }{res:Time}{txt:, }{res:{bind:2014}}{txt: to }{res:{bind:2022}}{p_end}
+{txt}{col 10}Delta: {res}1 unit
+{txt}
+{com}. 
+. * 随机效应模型
+. xtreg municipal_bond_return revenue_per_pop return poverty lessthanhighschoolgraduate gamb_rev_dummy pop, re
+{res}
+{txt}Random-effects GLS regression                   Number of obs     = {res}        81
+{txt}Group variable: {res}state_id                        {txt}Number of groups  = {res}         9
+
+{txt}R-squared:                                      Obs per group:
+     Within  = {res}0.3394                                         {txt}min = {res}         9
+{txt}     Between = {res}0.1175                                         {txt}avg = {res}       9.0
+{txt}     Overall = {res}0.1353                                         {txt}max = {res}         9
+
+                                                {txt}Wald chi2({res}6{txt})      =  {res}    11.58
+{txt}corr(u_i, X) = {res}0{txt} (assumed)                      Prob > chi2       =     {res}0.0721
+
+{txt}{hline 16}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}municipal_bon~n{col 17}{c |} Coefficient{col 29}  Std. err.{col 41}      z{col 49}   P>|z|{col 57}     [95% con{col 70}f. interval]
+{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+revenue_per_pop {c |}{col 17}{res}{space 2}-3.194738{col 29}{space 2} .9537915{col 40}{space 1}   -3.35{col 49}{space 3}0.001{col 57}{space 4}-5.064135{col 70}{space 3}-1.325341
+{txt}{space 9}return {c |}{col 17}{res}{space 2}  .182501{col 29}{space 2} .1975159{col 40}{space 1}    0.92{col 49}{space 3}0.355{col 57}{space 4} -.204623{col 70}{space 3} .5696251
+{txt}{space 8}poverty {c |}{col 17}{res}{space 2} .0229048{col 29}{space 2} .4946886{col 40}{space 1}    0.05{col 49}{space 3}0.963{col 57}{space 4}-.9466671{col 70}{space 3} .9924767
+{txt}lessthanhighs~e {c |}{col 17}{res}{space 2}-.3669334{col 29}{space 2} .3367719{col 40}{space 1}   -1.09{col 49}{space 3}0.276{col 57}{space 4}-1.026994{col 70}{space 3} .2931274
+{txt}{space 1}gamb_rev_dummy {c |}{col 17}{res}{space 2} .6889008{col 29}{space 2} .3146378{col 40}{space 1}    2.19{col 49}{space 3}0.029{col 57}{space 4}  .072222{col 70}{space 3}  1.30558
+{txt}{space 12}pop {c |}{col 17}{res}{space 2}-.1006389{col 29}{space 2}  .144007{col 40}{space 1}   -0.70{col 49}{space 3}0.485{col 57}{space 4}-.3828874{col 70}{space 3} .1816096
+{txt}{space 10}_cons {c |}{col 17}{res}{space 2}-1.495524{col 29}{space 2} .4950276{col 40}{space 1}   -3.02{col 49}{space 3}0.003{col 57}{space 4} -2.46576{col 70}{space 3}-.5252879
+{txt}{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+        sigma_u {c |} {res}         0
+        {txt}sigma_e {c |} {res} .89558541
+            {txt}rho {c |} {res}         0{txt}   (fraction of variance due to u_i)
+{hline 16}{c BT}{hline 64}
+
+{com}. outreg2 using regression_results.xls, replace
+{txt}{browse `"regression_results.xls"'}
+{browse `"/Users/yimingzhang/Desktop"' :dir}{com} : {txt}{stata `"seeout using "regression_results.txt""':seeout}
+
+{com}. 
+. reg municipal_bond_return revenue_per_pop poverty lessthanhighschoolgraduate gamb_rev_dummy pop
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        81
+{txt}{hline 13}{c +}{hline 34}   F(5, 75)        = {res}     2.15
+{txt}       Model {c |} {res} 10.8696156         5  2.17392312   {txt}Prob > F        ={res}    0.0688
+{txt}    Residual {c |} {res} 75.8714447        75  1.01161926   {txt}R-squared       ={res}    0.1253
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0670
+{txt}       Total {c |} {res} 86.7410603        80  1.08426325   {txt}Root MSE        =   {res} 1.0058
+
+{txt}{hline 16}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}municipal_bon~n{col 17}{c |} Coefficient{col 29}  Std. err.{col 41}      t{col 49}   P>|t|{col 57}     [95% con{col 70}f. interval]
+{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+revenue_per_pop {c |}{col 17}{res}{space 2}-3.085349{col 29}{space 2} .9454923{col 40}{space 1}   -3.26{col 49}{space 3}0.002{col 57}{space 4}-4.968866{col 70}{space 3}-1.201832
+{txt}{space 8}poverty {c |}{col 17}{res}{space 2}-.3032771{col 29}{space 2} .3462096{col 40}{space 1}   -0.88{col 49}{space 3}0.384{col 57}{space 4} -.992962{col 70}{space 3} .3864078
+{txt}lessthanhighs~e {c |}{col 17}{res}{space 2}-.1301411{col 29}{space 2} .2182794{col 40}{space 1}   -0.60{col 49}{space 3}0.553{col 57}{space 4}-.5649759{col 70}{space 3} .3046938
+{txt}{space 1}gamb_rev_dummy {c |}{col 17}{res}{space 2} .6959997{col 29}{space 2} .3142372{col 40}{space 1}    2.21{col 49}{space 3}0.030{col 57}{space 4} .0700071{col 70}{space 3} 1.321992
+{txt}{space 12}pop {c |}{col 17}{res}{space 2}-.0185832{col 29}{space 2} .1132534{col 40}{space 1}   -0.16{col 49}{space 3}0.870{col 57}{space 4}-.2441954{col 70}{space 3} .2070291
+{txt}{space 10}_cons {c |}{col 17}{res}{space 2}-1.379396{col 29}{space 2} .4783401{col 40}{space 1}   -2.88{col 49}{space 3}0.005{col 57}{space 4}-2.332298{col 70}{space 3}-.4264937
+{txt}{hline 16}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. dwstat
+{err}sample may not include multiple panels
+{txt}{search r(459), local:r(459);}
+
+end of do-file
+
+{search r(459), local:r(459);}
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. 
+. * 读入数据
+. use "Final_All_Merged_Data_for_Stata.dta", clear
+{txt}
+{com}. 
+. gen log_pop = ln(pop)
+{txt}(144 missing values generated)
+
+{com}. 
+. 
+. 
+. 
+. 
+. rename pop new_pop1
+{res}{txt}
+{com}. rename log_pop pop
+{res}{txt}
+{com}. * 设置面板数据结构
+. xtset state_id Time
+{res}
+{col 1}{txt:Panel variable: }{res:state_id}{txt: (strongly balanced)}
+{p 1 16 2}{txt:Time variable: }{res:Time}{txt:, }{res:{bind:2014}}{txt: to }{res:{bind:2022}}{p_end}
+{txt}{col 10}Delta: {res}1 unit
+{txt}
+{com}. 
+. * 随机效应模型
+. xtreg municipal_bond_return revenue_per_pop return poverty lessthanhighschoolgraduate gamb_rev_dummy pop, re
+{res}
+{txt}Random-effects GLS regression                   Number of obs     = {res}        81
+{txt}Group variable: {res}state_id                        {txt}Number of groups  = {res}         9
+
+{txt}R-squared:                                      Obs per group:
+     Within  = {res}0.3394                                         {txt}min = {res}         9
+{txt}     Between = {res}0.1175                                         {txt}avg = {res}       9.0
+{txt}     Overall = {res}0.1353                                         {txt}max = {res}         9
+
+                                                {txt}Wald chi2({res}6{txt})      =  {res}    11.58
+{txt}corr(u_i, X) = {res}0{txt} (assumed)                      Prob > chi2       =     {res}0.0721
+
+{txt}{hline 16}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}municipal_bon~n{col 17}{c |} Coefficient{col 29}  Std. err.{col 41}      z{col 49}   P>|z|{col 57}     [95% con{col 70}f. interval]
+{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+revenue_per_pop {c |}{col 17}{res}{space 2}-3.194738{col 29}{space 2} .9537915{col 40}{space 1}   -3.35{col 49}{space 3}0.001{col 57}{space 4}-5.064135{col 70}{space 3}-1.325341
+{txt}{space 9}return {c |}{col 17}{res}{space 2}  .182501{col 29}{space 2} .1975159{col 40}{space 1}    0.92{col 49}{space 3}0.355{col 57}{space 4} -.204623{col 70}{space 3} .5696251
+{txt}{space 8}poverty {c |}{col 17}{res}{space 2} .0229048{col 29}{space 2} .4946886{col 40}{space 1}    0.05{col 49}{space 3}0.963{col 57}{space 4}-.9466671{col 70}{space 3} .9924767
+{txt}lessthanhighs~e {c |}{col 17}{res}{space 2}-.3669334{col 29}{space 2} .3367719{col 40}{space 1}   -1.09{col 49}{space 3}0.276{col 57}{space 4}-1.026994{col 70}{space 3} .2931274
+{txt}{space 1}gamb_rev_dummy {c |}{col 17}{res}{space 2} .6889008{col 29}{space 2} .3146378{col 40}{space 1}    2.19{col 49}{space 3}0.029{col 57}{space 4}  .072222{col 70}{space 3}  1.30558
+{txt}{space 12}pop {c |}{col 17}{res}{space 2}-.1006389{col 29}{space 2}  .144007{col 40}{space 1}   -0.70{col 49}{space 3}0.485{col 57}{space 4}-.3828874{col 70}{space 3} .1816096
+{txt}{space 10}_cons {c |}{col 17}{res}{space 2}-1.495524{col 29}{space 2} .4950276{col 40}{space 1}   -3.02{col 49}{space 3}0.003{col 57}{space 4} -2.46576{col 70}{space 3}-.5252879
+{txt}{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+        sigma_u {c |} {res}         0
+        {txt}sigma_e {c |} {res} .89558541
+            {txt}rho {c |} {res}         0{txt}   (fraction of variance due to u_i)
+{hline 16}{c BT}{hline 64}
+
+{com}. outreg2 using regression_results.xls, replace
+{txt}{browse `"regression_results.xls"'}
+{browse `"/Users/yimingzhang/Desktop"' :dir}{com} : {txt}{stata `"seeout using "regression_results.txt""':seeout}
+
+{com}. 
+. xtreg municipal_bond_return revenue_per_pop poverty lessthanhighschoolgraduate gamb_rev_dummy pop, fe
+{txt}{p 0 6 2}note: {bf:poverty} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:lessthanhighschoolgraduate} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:gamb_rev_dummy} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:pop} omitted because of collinearity.{p_end}
+{res}
+{txt}Fixed-effects (within) regression{col 49}Number of obs{col 67}={col 69}{res}        81
+{txt}Group variable: {res}state_id{txt}{col 49}Number of groups{col 67}={col 69}{res}         9
+
+{txt}R-squared:{col 49}Obs per group:
+     Within  = {res}0.3394{col 63}{txt}min{col 67}={col 69}{res}         9
+{txt}     Between = {res}0.0859{col 63}{txt}avg{col 67}={col 69}{res}       9.0
+{txt}     Overall = {res}0.0585{col 63}{txt}max{col 67}={col 69}{res}         9
+
+{txt}{col 49}F({res}1{txt}, {res}71{txt}){col 67}={col 70}{res}    36.48
+{txt}corr(u_i, Xb) = {res}-0.8904{txt}{col 49}Prob > F{col 67}={col 73}{res}0.0000
+
+{txt}{hline 16}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}municipal_bon~n{col 17}{c |} Coefficient{col 29}  Std. err.{col 41}      t{col 49}   P>|t|{col 57}     [95% con{col 70}f. interval]
+{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+revenue_per_pop {c |}{col 17}{res}{space 2}-7.555393{col 29}{space 2} 1.250883{col 40}{space 1}   -6.04{col 49}{space 3}0.000{col 57}{space 4}-10.04958{col 70}{space 3}-5.061202
+{txt}{space 8}poverty {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+lessthanhighs~e {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+{space 1}gamb_rev_dummy {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+{space 12}pop {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+{space 10}_cons {c |}{col 17}{res}{space 2}-2.148495{col 29}{space 2} .3759813{col 40}{space 1}   -5.71{col 49}{space 3}0.000{col 57}{space 4} -2.89818{col 70}{space 3}-1.398809
+{txt}{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+        sigma_u {c |} {res} 1.2875268
+        {txt}sigma_e {c |} {res} .89558541
+            {txt}rho {c |} {res} .67392728{txt}   (fraction of variance due to u_i)
+{hline 16}{c BT}{hline 64}
+F test that all u_i=0: F({res}8{txt}, {res}71{txt}) = {res}3.85{col 62}{txt}Prob > F = {res}0.0008
+{txt}
+{com}. xtserial
+{err}command {bf}xtserial{sf} is unrecognized
+{txt}{search r(199), local:r(199);}
+
+end of do-file
+
+{search r(199), local:r(199);}
+
+{com}. drop new_revenue
+
+. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. 
+. * 读入数据
+. use "Final_All_Merged_Data_for_Stata.dta", clear
+{txt}
+{com}. 
+. gen log_pop = ln(pop)
+{txt}(144 missing values generated)
+
+{com}. 
+. 
+. 
+. 
+. 
+. rename pop new_pop1
+{res}{txt}
+{com}. rename log_pop pop
+{res}{txt}
+{com}. * 设置面板数据结构
+. xtset state_id Time
+{res}
+{col 1}{txt:Panel variable: }{res:state_id}{txt: (strongly balanced)}
+{p 1 16 2}{txt:Time variable: }{res:Time}{txt:, }{res:{bind:2014}}{txt: to }{res:{bind:2022}}{p_end}
+{txt}{col 10}Delta: {res}1 unit
+{txt}
+{com}. 
+. * 随机效应模型
+. xtreg municipal_bond_return revenue_per_pop return poverty lessthanhighschoolgraduate gamb_rev_dummy pop, re
+{res}
+{txt}Random-effects GLS regression                   Number of obs     = {res}        81
+{txt}Group variable: {res}state_id                        {txt}Number of groups  = {res}         9
+
+{txt}R-squared:                                      Obs per group:
+     Within  = {res}0.3394                                         {txt}min = {res}         9
+{txt}     Between = {res}0.1175                                         {txt}avg = {res}       9.0
+{txt}     Overall = {res}0.1353                                         {txt}max = {res}         9
+
+                                                {txt}Wald chi2({res}6{txt})      =  {res}    11.58
+{txt}corr(u_i, X) = {res}0{txt} (assumed)                      Prob > chi2       =     {res}0.0721
+
+{txt}{hline 16}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}municipal_bon~n{col 17}{c |} Coefficient{col 29}  Std. err.{col 41}      z{col 49}   P>|z|{col 57}     [95% con{col 70}f. interval]
+{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+revenue_per_pop {c |}{col 17}{res}{space 2}-3.194738{col 29}{space 2} .9537915{col 40}{space 1}   -3.35{col 49}{space 3}0.001{col 57}{space 4}-5.064135{col 70}{space 3}-1.325341
+{txt}{space 9}return {c |}{col 17}{res}{space 2}  .182501{col 29}{space 2} .1975159{col 40}{space 1}    0.92{col 49}{space 3}0.355{col 57}{space 4} -.204623{col 70}{space 3} .5696251
+{txt}{space 8}poverty {c |}{col 17}{res}{space 2} .0229048{col 29}{space 2} .4946886{col 40}{space 1}    0.05{col 49}{space 3}0.963{col 57}{space 4}-.9466671{col 70}{space 3} .9924767
+{txt}lessthanhighs~e {c |}{col 17}{res}{space 2}-.3669334{col 29}{space 2} .3367719{col 40}{space 1}   -1.09{col 49}{space 3}0.276{col 57}{space 4}-1.026994{col 70}{space 3} .2931274
+{txt}{space 1}gamb_rev_dummy {c |}{col 17}{res}{space 2} .6889008{col 29}{space 2} .3146378{col 40}{space 1}    2.19{col 49}{space 3}0.029{col 57}{space 4}  .072222{col 70}{space 3}  1.30558
+{txt}{space 12}pop {c |}{col 17}{res}{space 2}-.1006389{col 29}{space 2}  .144007{col 40}{space 1}   -0.70{col 49}{space 3}0.485{col 57}{space 4}-.3828874{col 70}{space 3} .1816096
+{txt}{space 10}_cons {c |}{col 17}{res}{space 2}-1.495524{col 29}{space 2} .4950276{col 40}{space 1}   -3.02{col 49}{space 3}0.003{col 57}{space 4} -2.46576{col 70}{space 3}-.5252879
+{txt}{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+        sigma_u {c |} {res}         0
+        {txt}sigma_e {c |} {res} .89558541
+            {txt}rho {c |} {res}         0{txt}   (fraction of variance due to u_i)
+{hline 16}{c BT}{hline 64}
+
+{com}. outreg2 using regression_results.xls, replace
+{txt}{browse `"regression_results.xls"'}
+{browse `"/Users/yimingzhang/Desktop"' :dir}{com} : {txt}{stata `"seeout using "regression_results.txt""':seeout}
+
+{com}. 
+. xtreg municipal_bond_return revenue_per_pop poverty lessthanhighschoolgraduate gamb_rev_dummy new_pop1, fe
+{txt}{p 0 6 2}note: {bf:poverty} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:lessthanhighschoolgraduate} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:gamb_rev_dummy} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:new_pop1} omitted because of collinearity.{p_end}
+{res}
+{txt}Fixed-effects (within) regression{col 49}Number of obs{col 67}={col 69}{res}       225
+{txt}Group variable: {res}state_id{txt}{col 49}Number of groups{col 67}={col 69}{res}        25
+
+{txt}R-squared:{col 49}Obs per group:
+     Within  = {res}0.0695{col 63}{txt}min{col 67}={col 69}{res}         9
+{txt}     Between = {res}0.0041{col 63}{txt}avg{col 67}={col 69}{res}       9.0
+{txt}     Overall = {res}0.0028{col 63}{txt}max{col 67}={col 69}{res}         9
+
+{txt}{col 49}F({res}1{txt}, {res}199{txt}){col 67}={col 70}{res}    14.85
+{txt}corr(u_i, Xb) = {res}-0.9817{txt}{col 49}Prob > F{col 67}={col 73}{res}0.0002
+
+{txt}{hline 16}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}municipal_bon~n{col 17}{c |} Coefficient{col 29}  Std. err.{col 41}      t{col 49}   P>|t|{col 57}     [95% con{col 70}f. interval]
+{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+revenue_per_pop {c |}{col 17}{res}{space 2}-1.456664{col 29}{space 2} .3779588{col 40}{space 1}   -3.85{col 49}{space 3}0.000{col 57}{space 4}-2.201982{col 70}{space 3}-.7113457
+{txt}{space 8}poverty {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+lessthanhighs~e {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+{space 1}gamb_rev_dummy {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+{space 7}new_pop1 {c |}{col 17}{res}{space 2}        0{col 29}{txt}  (omitted)
+{space 10}_cons {c |}{col 17}{res}{space 2} 2.03e-17{col 29}{space 2} .0681125{col 40}{space 1}    0.00{col 49}{space 3}1.000{col 57}{space 4}-.1343149{col 70}{space 3} .1343149
+{txt}{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+        sigma_u {c |} {res} 1.4593539
+        {txt}sigma_e {c |} {res} 1.0216879
+            {txt}rho {c |} {res} .67108037{txt}   (fraction of variance due to u_i)
+{hline 16}{c BT}{hline 64}
+F test that all u_i=0: F({res}24{txt}, {res}199{txt}) = {res}0.66{col 62}{txt}Prob > F = {res}0.8817
+{txt}
+{com}. xtserial
+{err}command {bf}xtserial{sf} is unrecognized
+{txt}{search r(199), local:r(199);}
+
+end of do-file
+
+{search r(199), local:r(199);}
+
+{com}. clear
+
+. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. 
+. cd /Users/yimingzhang/Desktop
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. * Step 1: Load the Excel data file
+. import excel "PPI_predict(1).xlsx", firstrow
+{res}{text}(6 vars, 259 obs)
+
+{com}. 
+. * Step 2: Convert the 'Date' column to Stata date format
+. gen stata_date = date(Date, "YMD")
+{err}type mismatch
+{txt}{search r(109), local:r(109);}
+
+end of do-file
+
+{search r(109), local:r(109);}
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. 
+. cd /Users/yimingzhang/Desktop
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. * Step 1: Load the Excel data file
+. import excel "PPI_predict(1).xlsx", firstrow
+{res}{err}no; data in memory would be lost
+{res}{txt}{search r(4), local:r(4);}
+
+end of do-file
+
+{search r(4), local:r(4);}
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. 
+. cd /Users/yimingzhang/Desktop
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. * Step 1: Load the Excel data file
+. import excel "PPI_predict(1).xlsx", firstrow
+{res}{err}no; data in memory would be lost
+{res}{txt}{search r(4), local:r(4);}
+
+end of do-file
+
+{search r(4), local:r(4);}
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. 
+. cd /Users/yimingzhang/Desktop
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. 
+. 
+. * Step 3: Drop observations with missing values
+. drop if missing(PPI_final%) | missing(AHEEHC%_6) | missing(UDGS%_6) | missing(MSP%_6) | missing(MTI%_6)
+{err}PPI_final% invalid name
+{txt}{search r(198), local:r(198);}
+
+end of do-file
+
+{search r(198), local:r(198);}
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * Step 1: Load the Excel data file
+. import excel "PPI_predict(1).xlsx", firstrow clear
+{res}{text}(6 vars, 259 obs)
+
+{com}. 
+. * Rename variables to comply with Stata naming conventions
+. rename PPI_final% PPI_final_pct
+{res}{err}invalid '%' 
+{txt}{search r(198), local:r(198);}
+
+end of do-file
+
+{search r(198), local:r(198);}
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. 
+. * 读入数据
+. use "PPI_predict.xlsx", clear
+{err}{p 0 4 2}
+file {bf:{err}PPI_predict.xlsx}
+not Stata format
+{p_end}
+{txt}{search r(610), local:r(610);}
+
+end of do-file
+
+{search r(610), local:r(610);}
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. 
+. * 读入数据
+. import excel "PPI_predict.xlsx", firstrow
+{res}{text}(6 vars, 259 obs)
+
+{com}. 
+. * Step 2: Convert the 'Date' column to Stata date format
+. gen stata_date = date(Date, "YMD")
+{err}type mismatch
+{txt}{search r(109), local:r(109);}
+
+end of do-file
+
+{search r(109), local:r(109);}
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. 
+. * 读入数据
+. import excel "PPI_predict.xlsx", firstrow clear
+{res}{text}(6 vars, 211 obs)
+
+{com}. 
+. * Step 2: Convert the 'Date' column to Stata date format
+. gen stata_date = date(Date, "YMD")
+{err}type mismatch
+{txt}{search r(109), local:r(109);}
+
+end of do-file
+
+{search r(109), local:r(109);}
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. 
+. * 读入数据
+. import excel "PPI_predict.xlsx", firstrow clear
+{res}{text}(6 vars, 211 obs)
+
+{com}. 
+. * Step 2: Convert the 'Date' column to Stata date format
+. 
+. 
+. * Step 3: Drop observations with missing values
+. 
+. 
+. * Step 5: Run the regression analysis
+. regress PPI_final_pct AHEEHC_pct_6 UDGS_pct_6 MSP_pct_6 MTI_pct_6
+{err}variable {bf}PPI_final_pct{sf} not found
+{txt}{search r(111), local:r(111);}
+
+end of do-file
+
+{search r(111), local:r(111);}
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. 
+. * 读入数据
+. import excel "PPI_predict.xlsx", firstrow clear
+{res}{text}(6 vars, 211 obs)
+
+{com}. 
+. * Step 2: Convert the 'Date' column to Stata date format
+. 
+. 
+. * Step 3: Drop observations with missing values
+. 
+. 
+. * Step 5: Run the regression analysis
+. regress PPI_final AHEEHC_6 UDGS_6 MSP_6 MTI_6
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        76
+{txt}{hline 13}{c +}{hline 34}   F(4, 71)        = {res}     6.11
+{txt}       Model {c |} {res} .000204207         4  .000051052   {txt}Prob > F        ={res}    0.0003
+{txt}    Residual {c |} {res} .000592994        71  8.3520e-06   {txt}R-squared       ={res}    0.2562
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.2142
+{txt}       Total {c |} {res}   .0007972        75  .000010629   {txt}Root MSE        =   {res} .00289
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}   PPI_final{col 14}{c |} Coefficient{col 26}  Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}AHEEHC_6 {c |}{col 14}{res}{space 2} .3160094{col 26}{space 2} .0956687{col 37}{space 1}    3.30{col 46}{space 3}0.001{col 54}{space 4} .1252514{col 67}{space 3} .5067674
+{txt}{space 6}UDGS_6 {c |}{col 14}{res}{space 2}-.0051611{col 26}{space 2} .0027352{col 37}{space 1}   -1.89{col 46}{space 3}0.063{col 54}{space 4} -.010615{col 67}{space 3} .0002928
+{txt}{space 7}MSP_6 {c |}{col 14}{res}{space 2} .0068196{col 26}{space 2} .0147901{col 37}{space 1}    0.46{col 46}{space 3}0.646{col 54}{space 4}-.0226711{col 67}{space 3} .0363103
+{txt}{space 7}MTI_6 {c |}{col 14}{res}{space 2}  .048917{col 26}{space 2}   .08525{col 37}{space 1}    0.57{col 46}{space 3}0.568{col 54}{space 4}-.1210667{col 67}{space 3} .2189006
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .0005093{col 26}{space 2} .0004123{col 37}{space 1}    1.24{col 46}{space 3}0.221{col 54}{space 4}-.0003128{col 67}{space 3} .0013315
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. 
+. * 读入数据
+. import excel "PPI_predict.xlsx", firstrow clear
+{res}{text}(6 vars, 211 obs)
+
+{com}. 
+. 
+. regress PPI_final AHEEHC_6 UDGS_6 MSP_6 MTI_6
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        76
+{txt}{hline 13}{c +}{hline 34}   F(4, 71)        = {res}     6.11
+{txt}       Model {c |} {res} .000204207         4  .000051052   {txt}Prob > F        ={res}    0.0003
+{txt}    Residual {c |} {res} .000592994        71  8.3520e-06   {txt}R-squared       ={res}    0.2562
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.2142
+{txt}       Total {c |} {res}   .0007972        75  .000010629   {txt}Root MSE        =   {res} .00289
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}   PPI_final{col 14}{c |} Coefficient{col 26}  Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}AHEEHC_6 {c |}{col 14}{res}{space 2} .3160094{col 26}{space 2} .0956687{col 37}{space 1}    3.30{col 46}{space 3}0.001{col 54}{space 4} .1252514{col 67}{space 3} .5067674
+{txt}{space 6}UDGS_6 {c |}{col 14}{res}{space 2}-.0051611{col 26}{space 2} .0027352{col 37}{space 1}   -1.89{col 46}{space 3}0.063{col 54}{space 4} -.010615{col 67}{space 3} .0002928
+{txt}{space 7}MSP_6 {c |}{col 14}{res}{space 2} .0068196{col 26}{space 2} .0147901{col 37}{space 1}    0.46{col 46}{space 3}0.646{col 54}{space 4}-.0226711{col 67}{space 3} .0363103
+{txt}{space 7}MTI_6 {c |}{col 14}{res}{space 2}  .048917{col 26}{space 2}   .08525{col 37}{space 1}    0.57{col 46}{space 3}0.568{col 54}{space 4}-.1210667{col 67}{space 3} .2189006
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .0005093{col 26}{space 2} .0004123{col 37}{space 1}    1.24{col 46}{space 3}0.221{col 54}{space 4}-.0003128{col 67}{space 3} .0013315
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using PPI_result.doc, replace
+{txt}{stata `"shellout using `"PPI_result.doc"'"':PPI_result.doc}
+{browse `"/Users/yimingzhang/Desktop"' :dir}{com} : {txt}{stata `"seeout using "PPI_result.txt""':seeout}
+
+{com}. 
+. import excel "Predict Core PPI.xlsx", firstrow clear
+{res}{text}(6 vars, 210 obs)
+
+{com}. 
+. regress PPI_CORE AHEEHC_6 UDGS_6 MSP_6 MTI_6
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        76
+{txt}{hline 13}{c +}{hline 34}   F(4, 71)        = {res}     9.20
+{txt}       Model {c |} {res} .000181831         4  .000045458   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} .000350661        71  4.9389e-06   {txt}R-squared       ={res}    0.3415
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.3044
+{txt}       Total {c |} {res} .000532492        75  7.0999e-06   {txt}Root MSE        =   {res} .00222
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}    PPI_CORE{col 14}{c |} Coefficient{col 26}  Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}AHEEHC_6 {c |}{col 14}{res}{space 2} .2299619{col 26}{space 2}  .073568{col 37}{space 1}    3.13{col 46}{space 3}0.003{col 54}{space 4} .0832715{col 67}{space 3} .3766523
+{txt}{space 6}UDGS_6 {c |}{col 14}{res}{space 2}-.0069584{col 26}{space 2} .0021034{col 37}{space 1}   -3.31{col 46}{space 3}0.001{col 54}{space 4}-.0111524{col 67}{space 3}-.0027644
+{txt}{space 7}MSP_6 {c |}{col 14}{res}{space 2} .0084803{col 26}{space 2} .0113734{col 37}{space 1}    0.75{col 46}{space 3}0.458{col 54}{space 4}-.0141976{col 67}{space 3} .0311583
+{txt}{space 7}MTI_6 {c |}{col 14}{res}{space 2} .0765996{col 26}{space 2} .0655561{col 37}{space 1}    1.17{col 46}{space 3}0.247{col 54}{space 4}-.0541156{col 67}{space 3} .2073148
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .0009401{col 26}{space 2} .0003171{col 37}{space 1}    2.96{col 46}{space 3}0.004{col 54}{space 4} .0003078{col 67}{space 3} .0015723
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using PPI_result.doc, append
+{txt}{stata `"shellout using `"PPI_result.doc"'"':PPI_result.doc}
+{browse `"/Users/yimingzhang/Desktop"' :dir}{com} : {txt}{stata `"seeout using "PPI_result.txt""':seeout}
+
+{com}. 
+{txt}end of do-file
+
+{com}. shellout using `"PPI_result.doc"'
+{opt shellout} probably will not work with MacOSX
+{txt}
+zsh:1: command not found: PPI_result.doc
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. 
+. * 读入数据
+. import excel "PPI_predict.xlsx", firstrow clear
+{res}{text}(6 vars, 259 obs)
+
+{com}. 
+. 
+. regress PPI_final AHEEHC_6 UDGS_6 MSP_6 MTI_6
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}       119
+{txt}{hline 13}{c +}{hline 34}   F(4, 114)       = {res}    14.95
+{txt}       Model {c |} {res} .000898142         4  .000224536   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} .001712205       114  .000015019   {txt}R-squared       ={res}    0.3441
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.3211
+{txt}       Total {c |} {res} .002610347       118  .000022122   {txt}Root MSE        =   {res} .00388
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}   PPI_final{col 14}{c |} Coefficient{col 26}  Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}AHEEHC_6 {c |}{col 14}{res}{space 2} .3467105{col 26}{space 2} .0772661{col 37}{space 1}    4.49{col 46}{space 3}0.000{col 54}{space 4}  .193647{col 67}{space 3}  .499774
+{txt}{space 6}UDGS_6 {c |}{col 14}{res}{space 2}-.0058141{col 26}{space 2} .0027171{col 37}{space 1}   -2.14{col 46}{space 3}0.035{col 54}{space 4}-.0111966{col 67}{space 3}-.0004315
+{txt}{space 7}MSP_6 {c |}{col 14}{res}{space 2} .0384633{col 26}{space 2}  .012244{col 37}{space 1}    3.14{col 46}{space 3}0.002{col 54}{space 4}  .014208{col 67}{space 3} .0627186
+{txt}{space 7}MTI_6 {c |}{col 14}{res}{space 2} .1784418{col 26}{space 2} .0770938{col 37}{space 1}    2.31{col 46}{space 3}0.022{col 54}{space 4} .0257196{col 67}{space 3}  .331164
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .0006851{col 26}{space 2} .0004693{col 37}{space 1}    1.46{col 46}{space 3}0.147{col 54}{space 4}-.0002447{col 67}{space 3} .0016148
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using PPI_result.doc, replace
+{txt}{stata `"shellout using `"PPI_result.doc"'"':PPI_result.doc}
+{browse `"/Users/yimingzhang/Desktop"' :dir}{com} : {txt}{stata `"seeout using "PPI_result.txt""':seeout}
+
+{com}. 
+. import excel "Predict Core PPI.xlsx", firstrow clear
+{res}{text}(6 vars, 259 obs)
+
+{com}. 
+. regress PPI_CORE AHEEHC_6 UDGS_6 MSP_6 MTI_6
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}       119
+{txt}{hline 13}{c +}{hline 34}   F(4, 114)       = {res}    22.21
+{txt}       Model {c |} {res} .000577129         4  .000144282   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} .000740666       114  6.4971e-06   {txt}R-squared       ={res}    0.4380
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.4182
+{txt}       Total {c |} {res} .001317795       118  .000011168   {txt}Root MSE        =   {res} .00255
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}    PPI_CORE{col 14}{c |} Coefficient{col 26}  Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}AHEEHC_6 {c |}{col 14}{res}{space 2} .2097757{col 26}{space 2} .0508185{col 37}{space 1}    4.13{col 46}{space 3}0.000{col 54}{space 4} .1091046{col 67}{space 3} .3104469
+{txt}{space 6}UDGS_6 {c |}{col 14}{res}{space 2}-.0072934{col 26}{space 2} .0017871{col 37}{space 1}   -4.08{col 46}{space 3}0.000{col 54}{space 4}-.0108336{col 67}{space 3}-.0037532
+{txt}{space 7}MSP_6 {c |}{col 14}{res}{space 2} .0305591{col 26}{space 2}  .008053{col 37}{space 1}    3.79{col 46}{space 3}0.000{col 54}{space 4} .0146062{col 67}{space 3}  .046512
+{txt}{space 7}MTI_6 {c |}{col 14}{res}{space 2}  .169452{col 26}{space 2} .0507052{col 37}{space 1}    3.34{col 46}{space 3}0.001{col 54}{space 4} .0690053{col 67}{space 3} .2698986
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .0012132{col 26}{space 2} .0003087{col 37}{space 1}    3.93{col 46}{space 3}0.000{col 54}{space 4} .0006017{col 67}{space 3} .0018247
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using PPI_result.doc, append
+{txt}{stata `"shellout using `"PPI_result.doc"'"':PPI_result.doc}
+{browse `"/Users/yimingzhang/Desktop"' :dir}{com} : {txt}{stata `"seeout using "PPI_result.txt""':seeout}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD27647.000000"
+{txt}
+{com}. * 设置工作目录到您存储数据的地方
+. cd "/Users/yimingzhang/Desktop"
+{res}/Users/yimingzhang/Desktop
+{txt}
+{com}. 
+. 
+. * 读入数据
+. import excel "PPI_predict.xlsx", firstrow clear
+{res}{text}(6 vars, 259 obs)
+
+{com}. 
+. 
+. regress PPI_final AHEEHC_6 UDGS_6 MSP_6 MTI_6
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}       119
+{txt}{hline 13}{c +}{hline 34}   F(4, 114)       = {res}    14.95
+{txt}       Model {c |} {res} .000898142         4  .000224536   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} .001712205       114  .000015019   {txt}R-squared       ={res}    0.3441
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.3211
+{txt}       Total {c |} {res} .002610347       118  .000022122   {txt}Root MSE        =   {res} .00388
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}   PPI_final{col 14}{c |} Coefficient{col 26}  Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}AHEEHC_6 {c |}{col 14}{res}{space 2} .3467105{col 26}{space 2} .0772661{col 37}{space 1}    4.49{col 46}{space 3}0.000{col 54}{space 4}  .193647{col 67}{space 3}  .499774
+{txt}{space 6}UDGS_6 {c |}{col 14}{res}{space 2}-.0058141{col 26}{space 2} .0027171{col 37}{space 1}   -2.14{col 46}{space 3}0.035{col 54}{space 4}-.0111966{col 67}{space 3}-.0004315
+{txt}{space 7}MSP_6 {c |}{col 14}{res}{space 2} .0384633{col 26}{space 2}  .012244{col 37}{space 1}    3.14{col 46}{space 3}0.002{col 54}{space 4}  .014208{col 67}{space 3} .0627186
+{txt}{space 7}MTI_6 {c |}{col 14}{res}{space 2} .1784418{col 26}{space 2} .0770938{col 37}{space 1}    2.31{col 46}{space 3}0.022{col 54}{space 4} .0257196{col 67}{space 3}  .331164
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .0006851{col 26}{space 2} .0004693{col 37}{space 1}    1.46{col 46}{space 3}0.147{col 54}{space 4}-.0002447{col 67}{space 3} .0016148
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using PPI_result.doc, replace
+{txt}{stata `"shellout using `"PPI_result.doc"'"':PPI_result.doc}
+{browse `"/Users/yimingzhang/Desktop"' :dir}{com} : {txt}{stata `"seeout using "PPI_result.txt""':seeout}
+
+{com}. 
+. import excel "Predict Core PPI.xlsx", firstrow clear
+{res}{text}(6 vars, 259 obs)
+
+{com}. 
+. regress PPI_CORE AHEEHC_6 UDGS_6 MSP_6 MTI_6
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}       119
+{txt}{hline 13}{c +}{hline 34}   F(4, 114)       = {res}    22.21
+{txt}       Model {c |} {res} .000577129         4  .000144282   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} .000740666       114  6.4971e-06   {txt}R-squared       ={res}    0.4380
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.4182
+{txt}       Total {c |} {res} .001317795       118  .000011168   {txt}Root MSE        =   {res} .00255
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}    PPI_CORE{col 14}{c |} Coefficient{col 26}  Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}AHEEHC_6 {c |}{col 14}{res}{space 2} .2097757{col 26}{space 2} .0508185{col 37}{space 1}    4.13{col 46}{space 3}0.000{col 54}{space 4} .1091046{col 67}{space 3} .3104469
+{txt}{space 6}UDGS_6 {c |}{col 14}{res}{space 2}-.0072934{col 26}{space 2} .0017871{col 37}{space 1}   -4.08{col 46}{space 3}0.000{col 54}{space 4}-.0108336{col 67}{space 3}-.0037532
+{txt}{space 7}MSP_6 {c |}{col 14}{res}{space 2} .0305591{col 26}{space 2}  .008053{col 37}{space 1}    3.79{col 46}{space 3}0.000{col 54}{space 4} .0146062{col 67}{space 3}  .046512
+{txt}{space 7}MTI_6 {c |}{col 14}{res}{space 2}  .169452{col 26}{space 2} .0507052{col 37}{space 1}    3.34{col 46}{space 3}0.001{col 54}{space 4} .0690053{col 67}{space 3} .2698986
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .0012132{col 26}{space 2} .0003087{col 37}{space 1}    3.93{col 46}{space 3}0.000{col 54}{space 4} .0006017{col 67}{space 3} .0018247
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using PPI_result.doc, append
+{txt}{stata `"shellout using `"PPI_result.doc"'"':PPI_result.doc}
+{browse `"/Users/yimingzhang/Desktop"' :dir}{com} : {txt}{stata `"seeout using "PPI_result.txt""':seeout}
+
+{com}. 
+{txt}end of do-file
+
+{com}. save "/Users/yimingzhang/Desktop/Econometric/pset3/PPI Prediction.dta"
+{txt}{p 0 4 2}
+file {bf}
+/Users/yimingzhang/Desktop/Econometric/pset3/PPI Prediction.dta{rm}
+saved
+{p_end}
+
+{com}. exit, clear

@@ -1,0 +1,27 @@
+----------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/yimingzhang/Desktop/Econometric/data.log
+  log type:  text
+ opened on:  21 Aug 2023, 00:30:19
+
+. 
+. clear
+
+. import delimited Njmin3.csv
+file Njmin3.csv not found
+r(601);
+
+end of do-file
+
+r(601);
+
+. 
+. import delimited "/Users/yimingzhang/Desktop/Econometric/pset3/njmin3.csv"
+(encoding automatically selected: ISO-8859-1)
+(14 vars, 820 obs)
+
+. do "/var/folders/2w/hhdffn2j7vg0q3zxtrj96n6h0000gn/T//SD03235.000000"
+
+. clear
+
+. capture log close
